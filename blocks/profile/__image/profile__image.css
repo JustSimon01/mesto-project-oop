@@ -10,3 +10,10 @@
     margin: 0 0 26px;
   }
 }
+
+@media screen and (max-width: 320px) {
+  .profile__image {
+    max-width: 120px;
+    max-height: 120px;
+  }
+}

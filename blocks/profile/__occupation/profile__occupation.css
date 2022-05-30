@@ -2,6 +2,10 @@
   font-size: 18px;
   line-height: 1.22;
   margin: 0;
+  text-overflow: ellipsis;
+  max-width: 340px;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 610px) {
@@ -14,5 +18,6 @@
 @media screen and (max-width: 320px) {
   .profile__occupation {
     font-size: 14px;
+    max-width: 200px;
   }
 }

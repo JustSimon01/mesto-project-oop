@@ -5,6 +5,7 @@
   min-width: 22px;
   min-height: 19px;
   cursor: pointer;
+  transition: .2s linear;
 }
 
 .gallery__like-button:hover {

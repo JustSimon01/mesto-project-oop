@@ -2,11 +2,12 @@
   position: absolute;
   min-width: 32px;
   min-height: 32px;
-  top: -32px;
-  right: -32px;
+  top: -40px;
+  right: -40px;
   background: url(../../../images/icons/close-icon.svg) center/cover no-repeat;
   cursor: pointer;
   border: none;
+  transition: .2s linear;
 }
 
 .popup__close-button:hover {
@@ -17,7 +18,7 @@
   .popup__close-button {
     min-width: 20px;
     min-height: 20px;
-    top: -32px;
+    top: -36px;
     right: 0;
   }
 }
