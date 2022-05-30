@@ -1,0 +1,6 @@
+.gallery__item {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0;
+}

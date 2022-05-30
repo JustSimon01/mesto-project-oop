@@ -1,0 +1,12 @@
+.popup {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  min-width: 320px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, .5);
+}
