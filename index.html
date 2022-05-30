@@ -20,78 +20,80 @@
         <img src="./images/profile/profile-image.jpg" alt="Человек" class="profile__image">
         <div class="profile__info">
           <div class="profile__text">
-            <p class="profile__name">Жак-Ив Кусто</p>
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
             <p class="profile__occupation">Исследователь океана</p>
           </div>
-          <button class="profile__edit-button">
+          <button class="profile__edit-button" type="button">
           </button>
         </div>
       </div>
-      <button class="profile__add-button">
+      <button class="profile__add-button" type="button">
       </button>
     </section>
     <section class="gallery">
-      <div class="gallery__item">
-        <img src="./images/gallery/gallery-photo-karachaevsk.jpg" alt="Карачаевск" class="gallery__image">
-        <div class="gallery__post">
-          <h2 class="gallery__heading">Карачаевск</h2>
-          <button class="gallery__like-button">
+      <article class="card">
+        <img src="./images/gallery/gallery-photo-karachaevsk.jpg" alt="Карачаевск" class="card__image">
+        <div class="card__post">
+          <h2 class="card__heading">Карачаевск</h2>
+          <button class="card__like-button" type="button">
           </button>
         </div>
-      </div>
-      <div class="gallery__item">
-        <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="gallery__image">
-        <div class="gallery__post">
-          <h2 class="gallery__heading">Гора Эльбрус</h2>
-          <button class="gallery__like-button gallery__like-button_active">
+      </article>
+      <article class="card">
+        <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="card__image">
+        <div class="card__post">
+          <h2 class="card__heading">Гора Эльбрус</h2>
+          <button class="card__like-button card__like-button_active" type="button">
           </button>
         </div>
-      </div>
-      <div class="gallery__item">
-        <img src="./images/gallery/gallery-photo-dombai.jpg" alt="Домбай" class="gallery__image">
-        <div class="gallery__post">
-          <h2 class="gallery__heading">Домбай</h2>
-          <button class="gallery__like-button">
+      </article>
+      <article class="card">
+        <img src="./images/gallery/gallery-photo-dombai.jpg" alt="Домбай" class="card__image">
+        <div class="card__post">
+          <h2 class="card__heading">Домбай</h2>
+          <button class="card__like-button" type="button">
           </button>
         </div>
-      </div>
-      <div class="gallery__item">
-        <img src="./images/gallery/gallery-photo-karachaevsk.jpg" alt="Карачаевск" class="gallery__image">
-        <div class="gallery__post">
-          <h2 class="gallery__heading">Карачаево-Черкессия</h2>
-          <button class="gallery__like-button">
+      </article>
+      <article class="card">
+        <img src="./images/gallery/gallery-photo-karachaevsk.jpg" alt="Карачаевск" class="card__image">
+        <div class="card__post">
+          <h2 class="card__heading">Карачаево-Черкессия</h2>
+          <button class="card__like-button" type="button">
           </button>
         </div>
-      </div>
-      <div class="gallery__item">
-        <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="gallery__image">
-        <div class="gallery__post">
-          <h2 class="gallery__heading">Гора Эльбрус</h2>
-          <button class="gallery__like-button">
+      </article>
+      <article class="card">
+        <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="card__image">
+        <div class="card__post">
+          <h2 class="card__heading">Гора Эльбрус</h2>
+          <button class="card__like-button" type="button">
           </button>
         </div>
-      </div>
-      <div class="gallery__item">
-        <img src="./images/gallery/gallery-photo-dombai.jpg" alt="Домбай" class="gallery__image">
-        <div class="gallery__post">
-          <h2 class="gallery__heading">Домбай</h2>
-          <button class="gallery__like-button">
+      </article>
+      <article class="card">
+        <img src="./images/gallery/gallery-photo-dombai.jpg" alt="Домбай" class="card__image">
+        <div class="card__post">
+          <h2 class="card__heading">Домбай</h2>
+          <button class="card__like-button" type="button">
           </button>
         </div>
-      </div>
+      </article>
     </section>
   </main>
   <footer class="footer page__footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
   <div class="popup popup_opened">
-    <form class="popup__container" action="#">
-      <h2 class="popup__heading">Редактировать профиль</h2>
-      <input class="popup__text popup_margin_bottom" type="text" value="Жак-Ив Кусто">
-      <input class="popup__text" type="text" value="Исследователь океана">
-      <input class="popup__save-button" type="button" value="Сохранить">
-      <button class="popup__close-button"></button>
-    </form>
+    <div class="popup__container">
+      <form class="popup__form" name="edit-profile" action="#">
+        <h2 class="popup__heading">Редактировать профиль</h2>
+        <input class="popup__text" name="name" type="text" value="Жак-Ив Кусто" placeholder="Введите имя" required>
+        <input class="popup__text" type="text" name="occupation" value="Исследователь океана" placeholder="Введите профессию" required>
+        <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
+      </form>
+      <button class="popup__close-button" type="button"></button>
+    </div>
   </div>
 </body>
 

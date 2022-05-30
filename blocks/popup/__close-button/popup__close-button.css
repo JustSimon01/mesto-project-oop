@@ -14,6 +14,10 @@
   opacity: .6;
 }
 
+.popup__close-button:focus {
+  outline: none;
+}
+
 @media screen and (max-width: 610px) {
   .popup__close-button {
     min-width: 20px;
