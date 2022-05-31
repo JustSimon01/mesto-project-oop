@@ -11,20 +11,20 @@
 
 @media screen and (max-width: 610px) {
   .profile__name {
-    font-size: 36px;
+    font-size: 34px;
     text-align: center;
   }
 }
 
-@media screen and (max-width: 395px) {
+@media screen and (max-width: 430px) {
   .profile__name {
+    max-width: 200px;
     font-size: 27px;
   }
 }
 
 @media screen and (max-width: 320px) {
   .profile__name {
-    max-width: 200px;
     margin-bottom: 10px;
   }
 }
