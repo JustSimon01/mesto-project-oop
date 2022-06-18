@@ -43,7 +43,7 @@
         <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="card__image">
         <div class="card__post">
           <h2 class="card__heading">Гора Эльбрус</h2>
-          <button class="card__like-button card__like-button_active" type="button">
+          <button class="card__like-button" type="button">
           </button>
         </div>
       </article>
@@ -84,17 +84,31 @@
   <footer class="footer page__footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
-  <div class="popup">
+  <div class="popup popup-edit-profile">
     <div class="popup__container">
       <form class="popup__form" name="edit-profile" action="#">
         <h2 class="popup__heading">Редактировать профиль</h2>
-        <input class="popup__text" name="name" type="text" value="Жак-Ив Кусто" placeholder="Введите имя" required>
-        <input class="popup__text" type="text" name="occupation" value="Исследователь океана" placeholder="Введите профессию" required>
+        <input class="popup__text popup__name" name="name" type="text" value="Жак-Ив Кусто" placeholder="Введите имя" required>
+        <input class="popup__text popup__job" type="text" name="occupation" value="Исследователь океана" placeholder="Введите профессию" required>
         <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
       </form>
       <button class="popup__close-button" type="button"></button>
     </div>
   </div>
+
+  <div class="popup popup-add-cards">
+    <div class="popup__container">
+      <form class="popup__form" name="edit-profile" action="#">
+        <h2 class="popup__heading">Новое место</h2>
+        <input class="popup__text popup__name" name="name" type="text" placeholder="Название" required>
+        <input class="popup__text popup__job" type="text" name="occupation" placeholder="Ссылка на картинку" required>
+        <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
+      </form>
+      <button class="popup__close-button" type="button"></button>
+    </div>
+  </div>
+
+  <script src="scripts/index.js"></script>
 </body>
 
 </html>
