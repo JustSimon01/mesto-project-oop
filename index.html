@@ -31,54 +31,16 @@
       </button>
     </section>
     <section class="gallery">
-      <article class="card">
-        <img src="./images/gallery/gallery-photo-karachaevsk.jpg" alt="Карачаевск" class="card__image">
-        <div class="card__post">
-          <h2 class="card__heading">Карачаевск</h2>
-          <button class="card__like-button" type="button">
-          </button>
-        </div>
-      </article>
-      <article class="card">
-        <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="card__image">
-        <div class="card__post">
-          <h2 class="card__heading">Гора Эльбрус</h2>
-          <button class="card__like-button" type="button">
-          </button>
-        </div>
-      </article>
-      <article class="card">
-        <img src="./images/gallery/gallery-photo-dombai.jpg" alt="Домбай" class="card__image">
-        <div class="card__post">
-          <h2 class="card__heading">Домбай</h2>
-          <button class="card__like-button" type="button">
-          </button>
-        </div>
-      </article>
-      <article class="card">
-        <img src="./images/gallery/gallery-photo-karachaevsk.jpg" alt="Карачаевск" class="card__image">
-        <div class="card__post">
-          <h2 class="card__heading">Карачаево-Черкессия</h2>
-          <button class="card__like-button" type="button">
-          </button>
-        </div>
-      </article>
-      <article class="card">
-        <img src="./images/gallery/gallery-photo-elbrus.jpg" alt="Эльбрус" class="card__image">
-        <div class="card__post">
-          <h2 class="card__heading">Гора Эльбрус</h2>
-          <button class="card__like-button" type="button">
-          </button>
-        </div>
-      </article>
-      <article class="card">
-        <img src="./images/gallery/gallery-photo-dombai.jpg" alt="Домбай" class="card__image">
-        <div class="card__post">
-          <h2 class="card__heading">Домбай</h2>
-          <button class="card__like-button" type="button">
-          </button>
-        </div>
-      </article>
+      <template id="card-template">
+        <article class="card">
+          <img src="" alt="" class="card__image">
+          <button class="card__delete-button" type="button"></button>
+          <div class="card__post">
+            <h2 class="card__heading"></h2>
+            <button class="card__like-button" type="button"></button>
+          </div>
+        </article>
+      </template>
     </section>
   </main>
   <footer class="footer page__footer">
@@ -98,10 +60,10 @@
 
   <div class="popup popup-add-cards">
     <div class="popup__container">
-      <form class="popup__form" name="edit-profile" action="#">
+      <form class="popup__form" name="add-card" action="#">
         <h2 class="popup__heading">Новое место</h2>
-        <input class="popup__text popup__name" name="name" type="text" placeholder="Название" required>
-        <input class="popup__text popup__job" type="text" name="occupation" placeholder="Ссылка на картинку" required>
+        <input class="popup__text popup__place" name="place" type="text" placeholder="Название" required>
+        <input class="popup__text popup__url" type="url" name="url" placeholder="Ссылка на картинку" required>
         <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
       </form>
       <button class="popup__close-button" type="button"></button>
