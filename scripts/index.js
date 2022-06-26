@@ -1,6 +1,6 @@
 import initialCards from "./cards.js";
 
-const popupCloseButton = document.querySelectorAll('.popup__close-button'); // небольшой вопрос, можно ли 
+const popupCloseButton = document.querySelectorAll('.popup__close-button'); // небольшой вопрос, можно ли
 const popupProfileEditButton = document.querySelector('.profile__edit-button');
 const popupProfileAddButton = document.querySelector('.profile__add-button');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
@@ -10,13 +10,13 @@ const formElementAddCards = popupAddCards.querySelector('.popup__form');
 const popupImage = document.querySelector('.popup_type_image');
 const popupCardImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
-const nameInput = formElementEditProfile.querySelector('.popup__name');
-const jobInput = formElementEditProfile.querySelector('.popup__job');
 const profileName = document.querySelector('.profile__name');
 const profileOccupation = document.querySelector('.profile__occupation');
-const gallery = document.querySelector('.gallery');
+const container = document.querySelector('.gallery');
 const placeInput = formElementAddCards.querySelector('.popup__place');
 const urlInput = formElementAddCards.querySelector('.popup__url');
+const nameInput = formElementEditProfile.querySelector('.popup__name');
+const jobInput = formElementEditProfile.querySelector('.popup__job');
 
 // Модальное окно
 // Открытие и закрытие модального окна
@@ -83,13 +83,13 @@ function renderCard(container, cardElement) {
 }
 
 initialCards.forEach(item => {
-  renderCard(gallery, createCard(item.link, item.name))
+  renderCard(container, createCard(item.link, item.name))
 });
 
 function addCard(evt) {
   evt.preventDefault();
 
-  renderCard(gallery, createCard(urlInput.value, placeInput.value));
+  renderCard(container, createCard(urlInput.value, placeInput.value));
 
   urlInput.value = '';
   placeInput.value = '';
