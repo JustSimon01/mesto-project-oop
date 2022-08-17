@@ -1,10 +1,13 @@
 import initialCards from "./cards.js";
 
-const popupCloseButton = document.querySelectorAll('.popup__close-button'); // небольшой вопрос, можно ли
+const popup = document.querySelectorAll('.popup');
+const popupCloseButton = document.querySelectorAll('.popup__close-button');
 const popupProfileEditButton = document.querySelector('.profile__edit-button');
 const popupProfileAddButton = document.querySelector('.profile__add-button');
+const popupProfileImageEdit = document.querySelector('.profile__image-edit');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddCards = document.querySelector('.popup_type_add-cards');
+const popupEditImageProfile = document.querySelector('.popup_type_edit-profile-image');
 const formElementEditProfile = popupEditProfile.querySelector('.popup__form');
 const formElementAddCards = popupAddCards.querySelector('.popup__form');
 const popupImage = document.querySelector('.popup_type_image');
@@ -24,6 +27,10 @@ function switchPopup(item) {
   item.classList.toggle('popup_opened');
 }
 
+function closePopup(item) {
+  item.classList.remove('popup_opened');
+}
+
 popupProfileEditButton.addEventListener('click', () => {
   switchPopup(popupEditProfile);
   nameInput.value = profileName.textContent;
@@ -38,6 +45,24 @@ popupCloseButton.forEach(item => {
     switchPopup(popupClose);
   });
 });
+
+popupProfileImageEdit.addEventListener('click', () => {
+  switchPopup(popupEditImageProfile);
+})
+
+popup.forEach(item => {
+  item.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(item);
+    }
+  })
+
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      closePopup(item);
+    }
+  })
+})
 
 function submitProfileForm(evt) {
   evt.preventDefault();

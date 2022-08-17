@@ -17,7 +17,10 @@
   <main class="content page__content">
     <section class="profile content__profile">
       <div class="profile__data">
-        <img src="./images/profile/profile-image.jpg" alt="Человек" class="profile__image">
+        <div class="profile__image-edit">
+          <img class="profile__image" src="./images/profile/profile-image.jpg" alt="Человек">
+          <img class="profile__image-edit-button"></img>
+        </div>
         <div class="profile__info">
           <div class="profile__text">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -51,7 +54,8 @@
       <form class="popup__form" name="edit-profile" action="#">
         <h2 class="popup__heading">Редактировать профиль</h2>
         <input class="popup__text popup__name" name="name" type="text" value="" placeholder="Введите имя" required>
-        <input class="popup__text popup__job" type="text" name="occupation" value="" placeholder="Введите профессию" required>
+        <input class="popup__text popup__job" type="text" name="occupation" value="" placeholder="Введите профессию"
+          required>
         <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
       </form>
       <button class="popup__close-button" type="button"></button>
@@ -74,6 +78,17 @@
     <div class="popup__container popup__container_type_image">
       <img class="popup__image" src="" alt="">
       <p class="popup__caption"></p>
+      <button class="popup__close-button" type="button"></button>
+    </div>
+  </div>
+
+  <div class="popup popup_type_edit-profile-image">
+    <div class="popup__container popup__container_type_edit-profile-image">
+      <form class="popup__form" name="edit-profile-image" action="#">
+        <h2 class="popup__heading">Обновить аватар</h2>
+        <input class="popup__text popup__url" type="url" name="url" placeholder="Ссылка на картинку" required>
+        <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
+      </form>
       <button class="popup__close-button" type="button"></button>
     </div>
   </div>
