@@ -1,72 +1,81 @@
-const closeButton = document.querySelectorAll('.popup__close-button');
-const editButton = document.querySelector('.profile__edit-button');
-const addButton = document.querySelector('.profile__add-button');
+import initialCards from "./cards.js";
+
+const popup = document.querySelectorAll('.popup');
+const popupCloseButton = document.querySelectorAll('.popup__close-button');
+const popupProfileEditButton = document.querySelector('.profile__edit-button');
+const popupProfileAddButton = document.querySelector('.profile__add-button');
+const popupProfileImageEdit = document.querySelector('.profile__image-edit');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddCards = document.querySelector('.popup_type_add-cards');
+const popupEditImageProfile = document.querySelector('.popup_type_edit-profile-image');
 const formElementEditProfile = popupEditProfile.querySelector('.popup__form');
 const formElementAddCards = popupAddCards.querySelector('.popup__form');
 const popupImage = document.querySelector('.popup_type_image');
 const popupCardImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
-
-const initialCards = [{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+const profileName = document.querySelector('.profile__name');
+const profileOccupation = document.querySelector('.profile__occupation');
+const container = document.querySelector('.gallery');
+const placeInput = formElementAddCards.querySelector('.popup__place');
+const urlInput = formElementAddCards.querySelector('.popup__url');
+const nameInput = formElementEditProfile.querySelector('.popup__name');
+const jobInput = formElementEditProfile.querySelector('.popup__job');
 
 // Модальное окно
 // Открытие и закрытие модального окна
-function popupSwitch(item) {
+function switchPopup(item) {
   item.classList.toggle('popup_opened');
 }
 
-editButton.addEventListener('click', popupSwitch.bind(editButton, popupEditProfile));
-addButton.addEventListener('click', popupSwitch.bind(addButton, popupAddCards));
-closeButton.forEach(item => {
+function closePopup(item) {
+  item.classList.remove('popup_opened');
+}
+
+popupProfileEditButton.addEventListener('click', () => {
+  switchPopup(popupEditProfile);
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileOccupation.textContent;
+});
+popupProfileAddButton.addEventListener('click', () => {
+  switchPopup(popupAddCards);
+});
+popupCloseButton.forEach(item => {
   item.addEventListener('click', () => {
     const popupClose = item.closest('.popup');
-    popupSwitch(popupClose);
+    switchPopup(popupClose);
   });
 });
 
-function formSubmitHandler(evt) {
+popupProfileImageEdit.addEventListener('click', () => {
+  switchPopup(popupEditImageProfile);
+})
+
+popup.forEach(item => {
+  item.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup')) {
+      closePopup(item);
+    }
+  })
+
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+      closePopup(item);
+    }
+  })
+})
+
+function submitProfileForm(evt) {
   evt.preventDefault();
-  const nameInput = formElementEditProfile.querySelector('.popup__name');
-  const jobInput = formElementEditProfile.querySelector('.popup__job');
-  const profileName = document.querySelector('.profile__name');
-  const profileOccupation = document.querySelector('.profile__occupation');
 
   profileName.textContent = nameInput.value;
   profileOccupation.textContent = jobInput.value;
 
-  popupSwitch(popupEditProfile);
+  switchPopup(popupEditProfile);
 }
-formElementEditProfile.addEventListener('submit', formSubmitHandler);
+formElementEditProfile.addEventListener('submit', submitProfileForm);
 
 // Карточки
-function cardTemplate(link, name) {
-  const gallery = document.querySelector('.gallery');
+function createCard(link, name) {
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
@@ -77,8 +86,9 @@ function cardTemplate(link, name) {
   cardImage.src = link;
   cardImage.alt = name;
   cardImage.addEventListener('click', () => {
-    popupSwitch(popupImage);
+    switchPopup(popupImage);
     popupCardImage.src = link;
+    popupCardImage.alt = name;
     popupCaption.textContent = name;
   });
   cardHeading.textContent = name;
@@ -90,22 +100,25 @@ function cardTemplate(link, name) {
     cardItem.remove();
   })
 
-  gallery.prepend(cardElement);
+  return cardElement;
 }
 
-initialCards.forEach(item => cardTemplate(item.link, item.name));
+function renderCard(container, cardElement) {
+  container.prepend(cardElement);
+}
+
+initialCards.forEach(item => {
+  renderCard(container, createCard(item.link, item.name))
+});
 
 function addCard(evt) {
   evt.preventDefault();
 
-  const placeInput = formElementAddCards.querySelector('.popup__place');
-  const urlInput = formElementAddCards.querySelector('.popup__url');
-
-  cardTemplate(urlInput.value, placeInput.value);
+  renderCard(container, createCard(urlInput.value, placeInput.value));
 
   urlInput.value = '';
   placeInput.value = '';
 
-  popupSwitch(popupAddCards);
+  switchPopup(popupAddCards);
 }
 formElementAddCards.addEventListener('submit', addCard);

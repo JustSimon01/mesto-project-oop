@@ -1,0 +1,9 @@
+.popup__container_type_edit-profile-image {
+  min-width: 430px;
+}
+
+@media screen and (max-width:1280px) {
+  .popup__container_type_edit-profile-image {
+    min-width: calc(284px + (430 - 284) * ((100vw - 320px) / (1280 - 320)));
+  }
+}
