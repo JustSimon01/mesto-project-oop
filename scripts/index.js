@@ -23,8 +23,8 @@ const jobInput = formElementEditProfile.querySelector('.popup__job');
 
 // Модальное окно
 // Открытие и закрытие модального окна
-function switchPopup(item) {
-  item.classList.toggle('popup_opened');
+function openPopup(item) {
+  item.classList.add('popup_opened');
 }
 
 function closePopup(item) {
@@ -32,23 +32,25 @@ function closePopup(item) {
 }
 
 popupProfileEditButton.addEventListener('click', () => {
-  switchPopup(popupEditProfile);
+  openPopup(popupEditProfile);
   nameInput.value = profileName.textContent;
   jobInput.value = profileOccupation.textContent;
+  enableValidation();
 });
 popupProfileAddButton.addEventListener('click', () => {
-  switchPopup(popupAddCards);
+  openPopup(popupAddCards);
+  enableValidation();
 });
+popupProfileImageEdit.addEventListener('click', () => {
+  openPopup(popupEditImageProfile);
+  enableValidation();
+})
 popupCloseButton.forEach(item => {
   item.addEventListener('click', () => {
     const popupClose = item.closest('.popup');
-    switchPopup(popupClose);
+    closePopup(popupClose);
   });
 });
-
-popupProfileImageEdit.addEventListener('click', () => {
-  switchPopup(popupEditImageProfile);
-})
 
 popup.forEach(item => {
   item.addEventListener('click', (evt) => {
@@ -56,7 +58,6 @@ popup.forEach(item => {
       closePopup(item);
     }
   })
-
   document.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
       closePopup(item);
@@ -70,7 +71,7 @@ function submitProfileForm(evt) {
   profileName.textContent = nameInput.value;
   profileOccupation.textContent = jobInput.value;
 
-  switchPopup(popupEditProfile);
+  closePopup(popupEditProfile);
 }
 formElementEditProfile.addEventListener('submit', submitProfileForm);
 
@@ -86,7 +87,7 @@ function createCard(link, name) {
   cardImage.src = link;
   cardImage.alt = name;
   cardImage.addEventListener('click', () => {
-    switchPopup(popupImage);
+    openPopup(popupImage);
     popupCardImage.src = link;
     popupCardImage.alt = name;
     popupCaption.textContent = name;
@@ -115,10 +116,72 @@ function addCard(evt) {
   evt.preventDefault();
 
   renderCard(container, createCard(urlInput.value, placeInput.value));
-
-  urlInput.value = '';
-  placeInput.value = '';
-
-  switchPopup(popupAddCards);
+  document.forms.addCard.reset();
+  closePopup(popupAddCards);
 }
 formElementAddCards.addEventListener('submit', addCard);
+
+// Валидация форм
+function showInputError(formElement, inputElement, errorMessage) {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add('popup__text_type_error');
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add('popup__text-error_active');
+}
+
+function hideInputError(formElement, inputElement) {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove('popup__text_type_error');
+  errorElement.classList.remove('popup__text-error_active');
+  errorElement.textContent = '';
+};
+
+function checkInputValidity(formElement, inputElement) {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(formElement, inputElement);
+  }
+};
+
+function setEventListeners(formElement) {
+  const inputList = Array.from(formElement.querySelectorAll('.popup__text'));
+  const buttonElement = formElement.querySelector('.popup__save-button');
+
+  toggleButtonState(inputList, buttonElement);
+
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', function () {
+      checkInputValidity(formElement, inputElement);
+
+      toggleButtonState(inputList, buttonElement);
+    });
+  });
+};
+
+function enableValidation() {
+  const formList = Array.from(document.querySelectorAll('.popup__form'));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
+
+    setEventListeners(formElement);
+  });
+};
+
+function hasInvalidInput(inputList) {
+  return inputList.some(inputElement => {
+    return !inputElement.validity.valid;
+  });
+};
+
+function toggleButtonState(inputList, buttonElement) {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add('popup__save-button_inactive');
+    buttonElement.setAttribute('disabled', 'disabled');
+  } else {
+    buttonElement.classList.remove('popup__save-button_inactive');
+    buttonElement.removeAttribute('disabled');
+  }
+}

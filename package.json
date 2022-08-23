@@ -1,0 +1,19 @@
+{
+  "name": "mesto-project",
+  "version": "0.0.1",
+  "description": "Место - сеть для обмена фотографиями.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InertialForce/mesto-project.git"
+  },
+  "author": "Kirill Karpachev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/InertialForce/mesto-project/issues"
+  },
+  "homepage": "https://github.com/InertialForce/mesto-project#readme"
+}
