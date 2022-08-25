@@ -1,16 +1,37 @@
 .profile__image-edit {
   border-radius: 50%;
   margin-right: 30px;
+  position: relative;
   cursor: pointer;
   transition: .2s linear;
 }
 
-.profile__image-edit:hover {
-  filter: brightness(.2);
+.profile__image-edit::after {
+  content: "";
+  background: url(../../../images/icons/edit-icon.svg) center/cover no-repeat;
+  min-width: 26px;
+  min-height: 26px;
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  pointer-events: none;
+  opacity: 0;
+  transition: .2s linear;
+}
+
+.profile__image-edit:hover::after {
+  opacity: 1;
 }
 
 @media screen and (max-width: 768px) {
   .profile__image-edit {
     margin-right: 0;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .profile__image-edit::after {
+    top: 50px;
+    left: 50px;
   }
 }

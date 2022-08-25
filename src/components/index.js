@@ -5,12 +5,13 @@ const popup = document.querySelectorAll('.popup');
 const popupCloseButton = document.querySelectorAll('.popup__close-button');
 const popupProfileEditButton = document.querySelector('.profile__edit-button');
 const popupProfileAddButton = document.querySelector('.profile__add-button');
-const popupProfileImageEdit = document.querySelector('.profile__image-edit');
+const popupProfileImageEditButton = document.querySelector('.profile__image-edit');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddCards = document.querySelector('.popup_type_add-cards');
 const popupEditImageProfile = document.querySelector('.popup_type_edit-profile-image');
 const formElementEditProfile = popupEditProfile.querySelector('.popup__form');
 const formElementAddCards = popupAddCards.querySelector('.popup__form');
+const formElementEditImageProfile = popupEditImageProfile.querySelector('.popup__form');
 const popupImage = document.querySelector('.popup_type_image');
 const popupCardImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
@@ -21,6 +22,8 @@ const placeInput = formElementAddCards.querySelector('.popup__place');
 const urlInput = formElementAddCards.querySelector('.popup__url');
 const nameInput = formElementEditProfile.querySelector('.popup__name');
 const jobInput = formElementEditProfile.querySelector('.popup__job');
+const imageProfile = document.querySelector('.profile__image');
+const imageEditInput = formElementEditImageProfile.querySelector('.popup__edit-image');
 
 // Модальное окно
 // Открытие и закрытие модального окна
@@ -42,7 +45,8 @@ popupProfileAddButton.addEventListener('click', () => {
   openPopup(popupAddCards);
   enableValidation();
 });
-popupProfileImageEdit.addEventListener('click', () => {
+popupProfileImageEditButton.addEventListener('click', () => {
+  imageEditInput.value = '';
   openPopup(popupEditImageProfile);
   enableValidation();
 })
@@ -75,6 +79,14 @@ function submitProfileForm(evt) {
   closePopup(popupEditProfile);
 }
 formElementEditProfile.addEventListener('submit', submitProfileForm);
+
+function editProfileImage(evt) {
+  evt.preventDefault();
+  imageProfile.src = imageEditInput.value;
+  closePopup(popupEditImageProfile);
+}
+
+formElementEditImageProfile.addEventListener('submit', editProfileImage);
 
 // Карточки
 function createCard(link, name) {
