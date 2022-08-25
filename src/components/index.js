@@ -1,4 +1,5 @@
 import initialCards from "./cards.js";
+import '../pages/index.css';
 
 const popup = document.querySelectorAll('.popup');
 const popupCloseButton = document.querySelectorAll('.popup__close-button');

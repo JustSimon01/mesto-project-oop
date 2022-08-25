@@ -6,19 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Кирилл Карпачев">
-  <link rel="stylesheet" href="./pages/index.css">
   <title>Mesto</title>
 </head>
 
 <body class="page">
   <header class="header page__header">
-    <img src="./images/header/logo.svg" alt="Логотип 'Место'" class="header__logo">
+    <img src="<%=require('./images/header/logo.svg')%>" alt="Логотип 'Место'" class="header__logo">
   </header>
   <main class="content page__content">
     <section class="profile content__profile">
       <div class="profile__data">
         <div class="profile__image-edit">
-          <img class="profile__image" src="./images/profile/profile-image.jpg" alt="Человек">
+          <img class="profile__image" src="<%=require('./images/profile/profile-image.jpg')%>" alt="Человек">
           <img class="profile__image-edit-button"></img>
         </div>
         <div class="profile__info">
@@ -111,7 +110,6 @@
       <button class="popup__close-button" type="button"></button>
     </div>
   </div>
-  <script type="module" src="./scripts/index.js"></script>
 </body>
 
 </html>
