@@ -18,7 +18,6 @@
       <div class="profile__data">
         <div class="profile__image-edit">
           <img class="profile__image" src="<%=require('./images/profile/profile-image.jpg')%>" alt="Человек">
-          <img class="profile__image-edit-button"></img>
         </div>
         <div class="profile__info">
           <div class="profile__text">
@@ -101,7 +100,7 @@
       <form class="popup__form" name="editProfileImage" action="#">
         <h2 class="popup__heading">Обновить аватар</h2>
         <label class="popup__field">
-          <input class="popup__text popup__url" id="url-input" type="url" name="url" placeholder="Ссылка на картинку"
+          <input class="popup__text popup__edit-image" id="url-input" type="url" name="url" placeholder="Ссылка на картинку"
             required>
           <span class="popup__text-error url-input-error"></span>
         </label>

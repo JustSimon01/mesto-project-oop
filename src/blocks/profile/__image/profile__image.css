@@ -1,8 +1,14 @@
 .profile__image {
   border-radius: 50%;
   max-width: 140px;
+  min-width: 140px;
   max-height: 140px;
   object-fit: cover;
+  transition: .2s linear;
+}
+
+.profile__image:hover {
+  filter: brightness(.2);
 }
 
 @media screen and (max-width: 768px) {
@@ -14,6 +20,7 @@
 @media screen and (max-width: 320px) {
   .profile__image {
     max-width: 120px;
+    min-width: 120px;
     max-height: 120px;
   }
 }
