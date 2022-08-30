@@ -10,5 +10,6 @@
 * Методология БЭМ
 * Файловая структура Nested
 * JavaScript
+* Webpack
 
 Ссылка на GitHub Pages: https://inertialforce.github.io/mesto/
