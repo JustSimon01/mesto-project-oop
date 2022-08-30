@@ -1,0 +1,12 @@
+.popup__field {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  margin-bottom: 43px;
+}
+
+@media screen and (max-width:320px) {
+  .popup__field {
+    margin-bottom: 50px;
+  }
+}

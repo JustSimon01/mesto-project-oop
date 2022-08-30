@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Кирилл Карпачев">
+  <title>Mesto</title>
+</head>
+
+<body class="page">
+  <header class="header page__header">
+    <img src="<%=require('./images/header/logo.svg')%>" alt="Логотип 'Место'" class="header__logo">
+  </header>
+  <main class="content page__content">
+    <section class="profile content__profile">
+      <div class="profile__data">
+        <div class="profile__image-edit">
+          <img class="profile__image" src="<%=require('./images/profile/profile-image.jpg')%>" alt="Человек">
+        </div>
+        <div class="profile__info">
+          <div class="profile__text">
+            <h1 class="profile__name">Жак-Ив Кусто</h1>
+            <p class="profile__occupation">Исследователь океана</p>
+          </div>
+          <button class="profile__edit-button" type="button">
+          </button>
+        </div>
+      </div>
+      <button class="profile__add-button" type="button">
+      </button>
+    </section>
+    <section class="gallery">
+      <template id="card-template">
+        <article class="card">
+          <img src="" alt="" class="card__image">
+          <button class="card__delete-button" type="button"></button>
+          <div class="card__post">
+            <h2 class="card__heading"></h2>
+            <button class="card__like-button" type="button"></button>
+          </div>
+        </article>
+      </template>
+    </section>
+  </main>
+  <footer class="footer page__footer">
+    <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+  </footer>
+  <div class="popup popup_type_edit-profile">
+    <div class="popup__container">
+      <form class="popup__form" name="editProfile" action="#" novalidate>
+        <h2 class="popup__heading">Редактировать профиль</h2>
+        <label class="popup__field">
+          <input class="popup__text popup__name" name="name" id="name-input" type="text" placeholder="Введите имя"
+            minlength="2" maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+          <span class="popup__text-error name-input-error"></span>
+        </label>
+        <label class="popup__field">
+          <input class="popup__text popup__job" id="job-input" type="text" name="occupation"
+            placeholder="Введите профессию" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яёА-ЯЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+          <span class="popup__text-error job-input-error"></span>
+        </label>
+        <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
+      </form>
+      <button class="popup__close-button" type="button"></button>
+    </div>
+  </div>
+
+  <div class="popup popup_type_add-cards">
+    <div class="popup__container">
+      <form class="popup__form" name="addCard" action="#">
+        <h2 class="popup__heading">Новое место</h2>
+        <label class="popup__field">
+          <input class="popup__text popup__place" id="place-input" name="place" type="text" placeholder="Название"
+            minlength="2" maxlength="30" required>
+          <span class="popup__text-error place-input-error"></span>
+        </label>
+        <label class="popup__field">
+          <input class="popup__text popup__url" id="url-input" type="url" name="url" placeholder="Ссылка на картинку"
+            required>
+          <span class="popup__text-error url-input-error"></span>
+        </label>
+        <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
+      </form>
+      <button class="popup__close-button" type="button"></button>
+    </div>
+  </div>
+
+  <div class="popup popup_type_image">
+    <div class="popup__container popup__container_type_image">
+      <img class="popup__image" src="" alt="">
+      <p class="popup__caption"></p>
+      <button class="popup__close-button" type="button"></button>
+    </div>
+  </div>
+
+  <div class="popup popup_type_edit-profile-image">
+    <div class="popup__container popup__container_type_edit-profile-image">
+      <form class="popup__form" name="editProfileImage" action="#">
+        <h2 class="popup__heading">Обновить аватар</h2>
+        <label class="popup__field">
+          <input class="popup__text popup__edit-image" id="url-input" type="url" name="url"
+            placeholder="Ссылка на картинку" required>
+          <span class="popup__text-error url-input-error"></span>
+        </label>
+        <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
+      </form>
+      <button class="popup__close-button" type="button"></button>
+    </div>
+  </div>
+</body>
+
+</html>
