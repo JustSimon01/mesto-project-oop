@@ -14,6 +14,11 @@ function hideInputError(formElement, inputElement, selectorClass) {
 };
 
 function checkInputValidity(formElement, inputElement, selectorClass) {
+  if (inputElement.validity.patternMismatch) {
+    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
+  } else {
+    inputElement.setCustomValidity("");
+  }
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage, selectorClass);
   } else {

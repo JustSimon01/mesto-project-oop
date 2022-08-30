@@ -53,12 +53,12 @@
         <h2 class="popup__heading">Редактировать профиль</h2>
         <label class="popup__field">
           <input class="popup__text popup__name" name="name" id="name-input" type="text" placeholder="Введите имя"
-            minlength="2" maxlength="40" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+            minlength="2" maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
           <span class="popup__text-error name-input-error"></span>
         </label>
         <label class="popup__field">
           <input class="popup__text popup__job" id="job-input" type="text" name="occupation"
-            placeholder="Введите профессию" minlength="2" maxlength="200" required>
+            placeholder="Введите профессию" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яёА-ЯЁ\s\-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
           <span class="popup__text-error job-input-error"></span>
         </label>
         <input class="popup__save-button" name="submit" type="submit" value="Сохранить">
