@@ -47,23 +47,33 @@ function hasInvalidInput(inputList) {
   });
 };
 
+function inactiveButton(buttonElement, selectorClass) {
+  buttonElement.classList.add(selectorClass.inactiveButtonClass);
+  buttonElement.setAttribute('disabled', 'disabled');
+}
+
+function activeButton(buttonElement, selectorClass) {
+  buttonElement.classList.remove(selectorClass.inactiveButtonClass);
+  buttonElement.removeAttribute('disabled');
+}
+
 function toggleButtonState(inputList, buttonElement, selectorClass) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(selectorClass.inactiveButtonClass);
-    buttonElement.setAttribute('disabled', 'disabled');
+    inactiveButton(buttonElement, selectorClass);
   } else {
-    buttonElement.classList.remove(selectorClass.inactiveButtonClass);
-    buttonElement.removeAttribute('disabled');
+    activeButton(buttonElement, selectorClass)
   }
 }
 
-export function enableValidation(selectorClass) {
+function enableValidation(selectorClass) {
   const formList = Array.from(document.querySelectorAll(selectorClass.formSelector));
   formList.forEach((formElement) => {
-    formElement.addEventListener('submit', function (evt) {
-      evt.preventDefault();
-    });
-
     setEventListeners(formElement, selectorClass);
   });
 };
+
+export {
+  enableValidation,
+  inactiveButton,
+  activeButton
+}
