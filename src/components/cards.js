@@ -1,4 +1,4 @@
-import {openPopup} from "./utils.js";
+import {openPopup} from "./modal.js";
 
 const initialCards = [{
     name: 'Архыз',
@@ -29,10 +29,10 @@ const initialCards = [{
 const popupImage = document.querySelector('.popup_type_image');
 const popupCardImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
+const cardTemplate = document.querySelector('#card-template').content;
 
 // Карточки
 function createCard(link, name) {
-  const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const cardHeading = cardElement.querySelector('.card__heading');

@@ -4,28 +4,28 @@ import {
   renderCard
 } from "./cards.js";
 import {
-  enableValidation
+  enableValidation,
+  inactiveButton,
+  activeButton
 } from "./validate.js";
 import {
   openPopup,
   closePopup
-} from "./utils.js";
-import {
-  submitProfileForm,
-  editProfileImage,
-  addCard,
-  popupAddCards,
-  popupEditImageProfile,
-  container,
-  imageEditInput,
-  profileName,
-  profileOccupation,
-  nameInput,
-  jobInput,
-  popupEditProfile
 } from "./modal.js";
 import '../pages/index.css';
 
+const placeInput = document.querySelector('.popup__place');
+const urlInput = document.querySelector('.popup__url');
+const popupAddCards = document.querySelector('.popup_type_add-cards');
+const container = document.querySelector('.gallery');
+const imageProfile = document.querySelector('.profile__image');
+const imageEditInput = document.querySelector('.popup__edit-image');
+const popupEditImageProfile = document.querySelector('.popup_type_edit-profile-image');
+const profileName = document.querySelector('.profile__name');
+const profileOccupation = document.querySelector('.profile__occupation');
+const nameInput = document.querySelector('.popup__name');
+const jobInput = document.querySelector('.popup__job');
+const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupCloseButton = document.querySelectorAll('.popup__close-button');
 const popupProfileEditButton = document.querySelector('.profile__edit-button');
 const popupProfileAddButton = document.querySelector('.profile__add-button');
@@ -46,16 +46,14 @@ popupProfileEditButton.addEventListener('click', () => {
   openPopup(popupEditProfile);
   nameInput.value = profileName.textContent;
   jobInput.value = profileOccupation.textContent;
-  enableValidation(popupSelectorClass);
+  activeButton(popupEditProfile.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
 });
 popupProfileAddButton.addEventListener('click', () => {
   openPopup(popupAddCards);
-  enableValidation(popupSelectorClass);
 });
 popupProfileImageEditButton.addEventListener('click', () => {
   imageEditInput.value = '';
   openPopup(popupEditImageProfile);
-  enableValidation(popupSelectorClass);
 })
 popupCloseButton.forEach(item => {
   item.addEventListener('click', () => {
@@ -64,9 +62,36 @@ popupCloseButton.forEach(item => {
   });
 });
 
-formElementEditProfile.addEventListener('submit', submitProfileForm);
-formElementEditImageProfile.addEventListener('submit', editProfileImage);
+enableValidation(popupSelectorClass);
+
+function addCard(evt) {
+  evt.preventDefault();
+
+  renderCard(container, createCard(urlInput.value, placeInput.value));
+  document.forms.addCard.reset();
+  closePopup(popupAddCards);
+  inactiveButton(popupAddCards.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
+}
 formElementAddCards.addEventListener('submit', addCard);
+
+function editProfileImage(evt) {
+  evt.preventDefault();
+  imageProfile.src = imageEditInput.value;
+  closePopup(popupEditImageProfile);
+
+  inactiveButton(popupEditImageProfile.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
+}
+formElementEditImageProfile.addEventListener('submit', editProfileImage);
+
+function submitProfileForm(evt) {
+  evt.preventDefault();
+
+  profileName.textContent = nameInput.value;
+  profileOccupation.textContent = jobInput.value;
+
+  closePopup(popupEditProfile);
+}
+formElementEditProfile.addEventListener('submit', submitProfileForm);
 
 initialCards.forEach(item => {
   renderCard(container, createCard(item.link, item.name))
