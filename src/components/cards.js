@@ -1,30 +1,10 @@
 import {openPopup} from "./modal.js";
-
-const initialCards = [{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-]
+import {
+  getInitialCards,
+  deleteCard,
+  putLikeCard,
+  deleteLikeCard
+} from "./api.js"
 
 const popupImage = document.querySelector('.popup_type_image');
 const popupCardImage = document.querySelector('.popup__image');
@@ -32,7 +12,7 @@ const popupCaption = document.querySelector('.popup__caption');
 const cardTemplate = document.querySelector('#card-template').content;
 
 // Карточки
-function createCard(link, name) {
+function createCard(link, name, cardId, likeCount) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const cardHeading = cardElement.querySelector('.card__heading');
@@ -41,6 +21,7 @@ function createCard(link, name) {
 
   cardImage.src = link;
   cardImage.alt = name;
+  cardLikeCount.textContent = likeCount;
   cardImage.addEventListener('click', () => {
     openPopup(popupImage);
     popupCardImage.src = link;
@@ -49,11 +30,13 @@ function createCard(link, name) {
   });
   cardHeading.textContent = name;
   cardLikeButton.addEventListener('click', (evt) => {
+    putLikeCard(cardId)
     evt.target.classList.toggle('card__like-button_active');
   })
   cardDeleteButton.addEventListener('click', () => {
     const cardItem = cardDeleteButton.closest('.card');
     cardItem.remove();
+    deleteCard(cardId);
   })
 
   return cardElement;
@@ -63,4 +46,4 @@ function renderCard(container, cardElement) {
   container.prepend(cardElement);
 }
 
-export {initialCards, createCard, renderCard}
+export {createCard, renderCard}

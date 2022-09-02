@@ -12,6 +12,12 @@ import {
   openPopup,
   closePopup
 } from "./modal.js";
+import {
+  getInitialCards,
+  getInfoUsers,
+  deleteCard,
+  deleteLikeCard
+} from "./api.js";
 import '../pages/index.css';
 
 const placeInput = document.querySelector('.popup__place');
@@ -93,6 +99,22 @@ function submitProfileForm(evt) {
 }
 formElementEditProfile.addEventListener('submit', submitProfileForm);
 
-initialCards.forEach(item => {
-  renderCard(container, createCard(item.link, item.name))
-});
+getInitialCards()
+  .then(cards => {
+    cards.reverse().forEach(card => {
+      renderCard(container, createCard(card.link, card.name, card._id, card.likes.length));
+      if (card.owner._id === "8526b46f4ab7627011941e9a") {
+        document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
+      }
+    })
+  })
+  .catch(err => {
+    console.log(err);
+  })
+
+getInfoUsers()
+  .then(data => {
+    profileName.textContent = data.name;
+    profileOccupation.textContent = data.about;
+    imageProfile.src = data.avatar;
+  })
