@@ -11,5 +11,6 @@
 * Файловая структура Nested
 * JavaScript
 * Webpack
+* Api
 
 Ссылка на GitHub Pages: https://inertialforce.github.io/mesto/
