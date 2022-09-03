@@ -3,7 +3,7 @@ function openPopup(item) {
   item.classList.add('popup_opened');
 
   document.addEventListener('keydown', closeEscButton);
-  document.addEventListener('click', closeOverlayClick);
+  item.addEventListener('click', closeOverlayClick);
 }
 
 function closePopup(item) {
