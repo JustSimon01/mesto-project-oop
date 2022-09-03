@@ -6,17 +6,19 @@ const config = {
   }
 }
 
+function resolution(res) {
+  if (res.ok) {
+    return res.json()
+  }
+
+  return Promise.reject(`Ошибка: ${res.status}`)
+}
+
 const getInfoUsers = () => {
   return fetch(`${config.baseUrl}/users/me`, {
       headers: config.headers
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json()
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`)
-    })
+    .then(resolution)
 
 }
 
@@ -24,13 +26,7 @@ const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
       headers: config.headers
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`)
-    })
+    .then(resolution)
 }
 
 const patchProfile = (name, about) => {
@@ -41,7 +37,7 @@ const patchProfile = (name, about) => {
       name: name,
       about: about
     })
-  })
+  }).then(resolution)
 }
 
 const patchAddCard = (name, link) => {
@@ -52,7 +48,7 @@ const patchAddCard = (name, link) => {
       name: name,
       link: link
     })
-  })
+  }).then(resolution)
 }
 
 const patchAvatar = (avatar) => {
@@ -62,28 +58,28 @@ const patchAvatar = (avatar) => {
     body: JSON.stringify({
       avatar: avatar
     })
-  })
+  }).then(resolution)
 }
 
 const deleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-  })
+  }).then(resolution)
 }
 
 const putLikeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers,
-  })
+  }).then(resolution)
 }
 
 const deleteLikeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers,
-  })
+  }).then(resolution)
 }
 
 export {

@@ -1,5 +1,4 @@
 import {
-  initialCards,
   createCard,
   renderCard
 } from "./cards.js";
@@ -15,8 +14,9 @@ import {
 import {
   getInitialCards,
   getInfoUsers,
-  deleteCard,
-  deleteLikeCard
+  patchProfile,
+  patchAddCard,
+  patchAvatar
 } from "./api.js";
 import '../pages/index.css';
 
@@ -70,42 +70,70 @@ popupCloseButton.forEach(item => {
 
 enableValidation(popupSelectorClass);
 
-function addCard(evt) {
+formElementAddCards.addEventListener('submit', (evt) => {
   evt.preventDefault();
+  loading(true);
+  patchAddCard(placeInput.value, urlInput.value)
+    .then(card => {
+      renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
+      document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
+      closePopup(popupAddCards);
+      inactiveButton(popupAddCards.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
+      document.forms.addCard.reset();
+    }).catch(err => console.log(err))
+    .finally(() => loading(false))
+});
 
-  renderCard(container, createCard(urlInput.value, placeInput.value));
-  document.forms.addCard.reset();
-  closePopup(popupAddCards);
-  inactiveButton(popupAddCards.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
-}
-formElementAddCards.addEventListener('submit', addCard);
-
-function editProfileImage(evt) {
+formElementEditImageProfile.addEventListener('submit', (evt) => {
   evt.preventDefault();
   imageProfile.src = imageEditInput.value;
   closePopup(popupEditImageProfile);
-
+  loading(true);
+  patchAvatar(imageEditInput.value)
+    .catch(err => console.log(err))
+    .finally(() => loading(false))
   inactiveButton(popupEditImageProfile.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
-}
-formElementEditImageProfile.addEventListener('submit', editProfileImage);
+});
 
-function submitProfileForm(evt) {
+formElementEditProfile.addEventListener('submit', (evt) => {
   evt.preventDefault();
-
+  loading(true);
   profileName.textContent = nameInput.value;
   profileOccupation.textContent = jobInput.value;
+  patchProfile(nameInput.value, jobInput.value)
+    .catch(err => console.log(err))
+    .finally(() => loading(false));
 
   closePopup(popupEditProfile);
+});
+
+function loading(isLoading) {
+  if (isLoading) {
+    document.querySelectorAll('.popup__save-button').forEach(save => {
+      save.value = 'Сохранить...';
+    })
+  } else {
+    document.querySelectorAll('.popup__save-button').forEach(save => {
+      save.value = 'Сохранить';
+    })
+  }
 }
-formElementEditProfile.addEventListener('submit', submitProfileForm);
 
 getInitialCards()
   .then(cards => {
     cards.reverse().forEach(card => {
-      renderCard(container, createCard(card.link, card.name, card._id, card.likes.length));
+      renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
       if (card.owner._id === "8526b46f4ab7627011941e9a") {
         document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
       }
+
+      card.likes.forEach(like => {
+        if (like._id === "8526b46f4ab7627011941e9a") {
+          document.querySelector('.card__like-button').classList.add('card__like-button_active');
+        } else {
+          document.querySelector('.card__like-button').classList.remove('card__like-button_active');
+        }
+      })
     })
   })
   .catch(err => {
@@ -117,4 +145,6 @@ getInfoUsers()
     profileName.textContent = data.name;
     profileOccupation.textContent = data.about;
     imageProfile.src = data.avatar;
+  }).catch(err => {
+    console.log(err);
   })
