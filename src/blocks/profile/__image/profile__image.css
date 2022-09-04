@@ -3,6 +3,7 @@
   max-width: 140px;
   min-width: 140px;
   max-height: 140px;
+  min-height: 140px;
   object-fit: cover;
   transition: .2s linear;
 }
@@ -22,5 +23,6 @@
     max-width: 120px;
     min-width: 120px;
     max-height: 120px;
+    min-height: 120px;
   }
 }

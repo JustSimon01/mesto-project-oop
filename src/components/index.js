@@ -20,6 +20,7 @@ import {
 } from "./api.js";
 import '../pages/index.css';
 
+let userId;
 const placeInput = document.querySelector('.popup__place');
 const urlInput = document.querySelector('.popup__url');
 const popupAddCards = document.querySelector('.popup_type_add-cards');
@@ -80,27 +81,32 @@ formElementAddCards.addEventListener('submit', (evt) => {
       closePopup(popupAddCards);
       inactiveButton(popupAddCards.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
       document.forms.addCard.reset();
-    }).catch(err => console.log(err))
+    })
+    .catch(err => console.log(err))
     .finally(() => loading(false))
 });
 
 formElementEditImageProfile.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  imageProfile.src = imageEditInput.value;
-  closePopup(popupEditImageProfile);
   loading(true);
   patchAvatar(imageEditInput.value)
+    .then(res => {
+      imageProfile.src = res.avatar;
+      closePopup(popupEditImageProfile);
+      inactiveButton(popupEditImageProfile.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
+    })
     .catch(err => console.log(err))
     .finally(() => loading(false))
-  inactiveButton(popupEditImageProfile.querySelector(popupSelectorClass.submitButtonSelector), popupSelectorClass);
 });
 
 formElementEditProfile.addEventListener('submit', (evt) => {
   evt.preventDefault();
   loading(true);
-  profileName.textContent = nameInput.value;
-  profileOccupation.textContent = jobInput.value;
   patchProfile(nameInput.value, jobInput.value)
+    .then((res) => {
+      profileName.textContent = res.name;
+      profileOccupation.textContent = res.about;
+    })
     .catch(err => console.log(err))
     .finally(() => loading(false));
 
@@ -119,32 +125,27 @@ function loading(isLoading) {
   }
 }
 
-getInitialCards()
-  .then(cards => {
+Promise.all([getInitialCards(), getInfoUsers()])
+  .then(([cards, data]) => {
+    userId = data._id;
+
     cards.reverse().forEach(card => {
       renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
-      if (card.owner._id === "8526b46f4ab7627011941e9a") {
+      if (card.owner._id === userId) {
         document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
       }
 
       card.likes.forEach(like => {
-        if (like._id === "8526b46f4ab7627011941e9a") {
+        if (like._id === userId) {
           document.querySelector('.card__like-button').classList.add('card__like-button_active');
         } else {
           document.querySelector('.card__like-button').classList.remove('card__like-button_active');
         }
       })
     })
-  })
-  .catch(err => {
-    console.log(err);
-  })
 
-getInfoUsers()
-  .then(data => {
     profileName.textContent = data.name;
     profileOccupation.textContent = data.about;
     imageProfile.src = data.avatar;
-  }).catch(err => {
-    console.log(err);
   })
+  .catch(err => console.log(err));
