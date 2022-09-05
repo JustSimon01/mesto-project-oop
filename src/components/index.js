@@ -106,11 +106,10 @@ formElementEditProfile.addEventListener('submit', (evt) => {
     .then((res) => {
       profileName.textContent = res.name;
       profileOccupation.textContent = res.about;
+      closePopup(popupEditProfile);
     })
     .catch(err => console.log(err))
     .finally(() => loading(false));
-
-  closePopup(popupEditProfile);
 });
 
 function loading(isLoading) {
