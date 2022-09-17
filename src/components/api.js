@@ -40,7 +40,7 @@ export default class Api {
     }).then(this._resolution)
   }
 
-  postAddCard = (name, link) => {
+  postAddCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
@@ -51,7 +51,7 @@ export default class Api {
     }).then(this._resolution)
   }
 
-  patchAvatar = (avatar) => {
+  patchAvatar(avatar) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
@@ -61,21 +61,21 @@ export default class Api {
     }).then(this._resolution)
   }
 
-  deleteCard = (cardId) => {
+  deleteCard(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this._headers,
     }).then(this._resolution)
   }
 
-  putLikeCard = (cardId) => {
+  putLikeCard(cardId) {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: 'PUT',
       headers: this._headers,
     }).then(this._resolution)
   }
 
-  deleteLikeCard = (cardId) => {
+  deleteLikeCard(cardId) {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: 'DELETE',
       headers: this._headers,

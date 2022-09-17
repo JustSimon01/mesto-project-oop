@@ -12,6 +12,8 @@ import {
   closePopup
 } from "./modal.js";
 import Api from "./Api.js";
+import Card from "./Card.js";
+import Section from "./Section.js";
 import '../pages/index.css';
 
 export const api = new Api({
@@ -153,7 +155,16 @@ function loading(isLoading) {
 Promise.all([api.getInitialCards(), api.getInfoUsers()])
   .then(([cards, data]) => {
     userId = data._id;
-
+    const cardsInitial = new Section({
+      items: cards,
+      renderer: (item) => {
+        const card = new Card(item, "#card-template");
+        const cardElement = card.generate();
+        cardsInitial.setItem(cardElement);
+      }
+    }, container);
+    cardsInitial.renderItems();
+    /*
     cards.reverse().forEach(card => {
       renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
       if (card.owner._id === userId) {
@@ -168,34 +179,9 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
         }
       })
     })
-
+*/
     profileName.textContent = data.name;
     profileOccupation.textContent = data.about;
     imageProfile.src = data.avatar;
   })
   .catch(err => console.log(err));
-
-// api.getInitialCards()
-//   .then(cards => {
-//     cards.reverse().forEach(card => {
-//       renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
-//       if (card.owner._id === userId) {
-//         document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
-//       }
-
-//       card.likes.forEach(like => {
-//         if (like._id === userId) {
-//           document.querySelector('.card__like-button').classList.add('card__like-button_active');
-//         } else {
-//           document.querySelector('.card__like-button').classList.remove('card__like-button_active');
-//         }
-//       })
-//     })
-//   })
-
-// api.getInfoUsers()
-//   .then(data => {
-//     profileName.textContent = data.name;
-//     profileOccupation.textContent = data.about;
-//     imageProfile.src = data.avatar;
-//   })
