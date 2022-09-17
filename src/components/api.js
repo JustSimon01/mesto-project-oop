@@ -1,3 +1,88 @@
+export default class Api {
+  constructor({
+    baseUrl,
+    headers
+  }) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
+  }
+
+  _resolution(res) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(`Ошибка: ${res.status}`)
+  }
+
+  getInfoUsers() {
+    return fetch(`${this._baseUrl}/users/me`, {
+        headers: this._headers
+      })
+      .then(this._resolution)
+  }
+
+  getInitialCards() {
+    return fetch(`${this._baseUrl}/cards`, {
+        headers: this._headers
+      })
+      .then(this._resolution)
+  }
+
+  patchProfile(name, about) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        about: about
+      })
+    }).then(this._resolution)
+  }
+
+  postAddCard = (name, link) => {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        link: link
+      })
+    }).then(this._resolution)
+  }
+
+  patchAvatar = (avatar) => {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: avatar
+      })
+    }).then(this._resolution)
+  }
+
+  deleteCard = (cardId) => {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    }).then(this._resolution)
+  }
+
+  putLikeCard = (cardId) => {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: 'PUT',
+      headers: this._headers,
+    }).then(this._resolution)
+  }
+
+  deleteLikeCard = (cardId) => {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    }).then(this._resolution)
+  }
+}
+/*
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-14',
   headers: {
@@ -40,7 +125,7 @@ const patchProfile = (name, about) => {
   }).then(resolution)
 }
 
-const patchAddCard = (name, link) => {
+const postAddCard = (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
@@ -80,15 +165,4 @@ const deleteLikeCard = (cardId) => {
     method: 'DELETE',
     headers: config.headers,
   }).then(resolution)
-}
-
-export {
-  getInfoUsers,
-  getInitialCards,
-  patchProfile,
-  patchAddCard,
-  deleteCard,
-  putLikeCard,
-  deleteLikeCard,
-  patchAvatar
-}
+}*/

@@ -11,15 +11,16 @@ import {
   openPopup,
   closePopup
 } from "./modal.js";
-import {
-  getInitialCards,
-  getInfoUsers,
-  patchProfile,
-  patchAddCard,
-  patchAvatar
-} from "./api.js";
+import Api from "./Api.js";
 import '../pages/index.css';
 
+export const api = new Api({
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-14',
+  headers: {
+    authorization: '21ec355f-df00-4771-88de-f3c59b8377f4',
+    'Content-Type': 'application/json'
+  }
+});
 let userId;
 const placeInput = document.querySelector('.popup__place');
 const urlInput = document.querySelector('.popup__url');
@@ -74,7 +75,7 @@ enableValidation(popupSelectorClass);
 formElementAddCards.addEventListener('submit', (evt) => {
   evt.preventDefault();
   loading(true);
-  patchAddCard(placeInput.value, urlInput.value)
+  api.postAddCard(placeInput.value, urlInput.value)
     .then(card => {
       renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
       document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
@@ -89,7 +90,7 @@ formElementAddCards.addEventListener('submit', (evt) => {
 formElementEditImageProfile.addEventListener('submit', (evt) => {
   evt.preventDefault();
   loading(true);
-  patchAvatar(imageEditInput.value)
+  api.patchAvatar(imageEditInput.value)
     .then(res => {
       imageProfile.src = res.avatar;
       closePopup(popupEditImageProfile);
@@ -102,7 +103,7 @@ formElementEditImageProfile.addEventListener('submit', (evt) => {
 formElementEditProfile.addEventListener('submit', (evt) => {
   evt.preventDefault();
   loading(true);
-  patchProfile(nameInput.value, jobInput.value)
+  api.patchProfile(nameInput.value, jobInput.value)
     .then((res) => {
       profileName.textContent = res.name;
       profileOccupation.textContent = res.about;
@@ -124,7 +125,32 @@ function loading(isLoading) {
   }
 }
 
-Promise.all([getInitialCards(), getInfoUsers()])
+// Promise.all([getInitialCards(), getInfoUsers()])
+//   .then(([cards, data]) => {
+// userId = data._id;
+
+// cards.reverse().forEach(card => {
+//   renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
+//   if (card.owner._id === userId) {
+//     document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
+//   }
+
+//   card.likes.forEach(like => {
+//     if (like._id === userId) {
+//       document.querySelector('.card__like-button').classList.add('card__like-button_active');
+//     } else {
+//       document.querySelector('.card__like-button').classList.remove('card__like-button_active');
+//     }
+//   })
+// })
+
+// profileName.textContent = data.name;
+// profileOccupation.textContent = data.about;
+// imageProfile.src = data.avatar;
+//   })
+//   .catch(err => console.log(err));
+
+Promise.all([api.getInitialCards(), api.getInfoUsers()])
   .then(([cards, data]) => {
     userId = data._id;
 
@@ -148,3 +174,28 @@ Promise.all([getInitialCards(), getInfoUsers()])
     imageProfile.src = data.avatar;
   })
   .catch(err => console.log(err));
+
+// api.getInitialCards()
+//   .then(cards => {
+//     cards.reverse().forEach(card => {
+//       renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
+//       if (card.owner._id === userId) {
+//         document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
+//       }
+
+//       card.likes.forEach(like => {
+//         if (like._id === userId) {
+//           document.querySelector('.card__like-button').classList.add('card__like-button_active');
+//         } else {
+//           document.querySelector('.card__like-button').classList.remove('card__like-button_active');
+//         }
+//       })
+//     })
+//   })
+
+// api.getInfoUsers()
+//   .then(data => {
+//     profileName.textContent = data.name;
+//     profileOccupation.textContent = data.about;
+//     imageProfile.src = data.avatar;
+//   })
