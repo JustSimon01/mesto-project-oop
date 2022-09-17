@@ -158,7 +158,7 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
     const cardsInitial = new Section({
       items: cards,
       renderer: (item) => {
-        const card = new Card(item, "#card-template");
+        const card = new Card(item, "#card-template", userId);
         const cardElement = card.generate();
         cardsInitial.setItem(cardElement);
       }
