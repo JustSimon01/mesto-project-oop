@@ -5,6 +5,8 @@ import FormValidator from "./FormValidator.js";
 import Api from "./Api.js";
 import Card from "./Card.js";
 import Section from "./Section.js";
+import PopupWithImage from "./PopupWithImage.js";
+import Popup from "./Popup.js";
 import "../pages/index.css";
 
 export const api = new Api({
@@ -16,6 +18,7 @@ export const api = new Api({
 });
 let userId;
 const placeInput = document.querySelector(".popup__place");
+const popupImage = document.querySelector('.popup_type_image');
 const urlInput = document.querySelector(".popup__url");
 const popupAddCards = document.querySelector(".popup_type_add-cards");
 const container = document.querySelector(".gallery");
@@ -66,12 +69,9 @@ popupProfileImageEditButton.addEventListener("click", () => {
   imageEditInput.value = "";
   openPopup(popupEditImageProfile);
 });
-popupCloseButton.forEach((item) => {
-  item.addEventListener("click", () => {
-    const popupClose = item.closest(".popup");
-    closePopup(popupClose);
-  });
-});
+// Временная кнопка закрытия попапов.
+const popupClose = new Popup(document.querySelector('.popup'));
+popupClose.setEventListeners();
 
 //новая валидация полей
 const userInfo = new FormValidator(popupSelectorClass, formElementEditProfile);
@@ -163,31 +163,6 @@ function loading(isLoading) {
   }
 }
 
-// Promise.all([getInitialCards(), getInfoUsers()])
-//   .then(([cards, data]) => {
-// userId = data._id;
-
-// cards.reverse().forEach(card => {
-//   renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
-//   if (card.owner._id === userId) {
-//     document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
-//   }
-
-//   card.likes.forEach(like => {
-//     if (like._id === userId) {
-//       document.querySelector('.card__like-button').classList.add('card__like-button_active');
-//     } else {
-//       document.querySelector('.card__like-button').classList.remove('card__like-button_active');
-//     }
-//   })
-// })
-
-// profileName.textContent = data.name;
-// profileOccupation.textContent = data.about;
-// imageProfile.src = data.avatar;
-//   })
-//   .catch(err => console.log(err));
-
 Promise.all([api.getInitialCards(), api.getInfoUsers()])
   .then(([cards, data]) => {
     userId = data._id;
@@ -195,7 +170,13 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
       {
         items: cards,
         renderer: (item) => {
-          const card = new Card(item, "#card-template", userId);
+          const card = new Card(item, "#card-template", userId, {
+            handleCardClick: () => {
+              const openImage = new PopupWithImage(item, popupImage);
+              openImage.open();
+              openImage.setEventListeners();
+            }
+          });
           const cardElement = card.generate();
           cardsInitial.setItem(cardElement);
         },
@@ -203,22 +184,7 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
       container
     );
     cardsInitial.renderItems();
-    /*
-    cards.reverse().forEach(card => {
-      renderCard(container, createCard(card.link, card.name, card._id, card.likes.length, card.likes));
-      if (card.owner._id === userId) {
-        document.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
-      }
 
-      card.likes.forEach(like => {
-        if (like._id === userId) {
-          document.querySelector('.card__like-button').classList.add('card__like-button_active');
-        } else {
-          document.querySelector('.card__like-button').classList.remove('card__like-button_active');
-        }
-      })
-    })
-*/
     profileName.textContent = data.name;
     profileOccupation.textContent = data.about;
     imageProfile.src = data.avatar;
