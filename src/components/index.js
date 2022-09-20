@@ -7,6 +7,7 @@ import Card from "./Card.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
 import Popup from "./Popup.js";
+import UserInfo from "./UserInfo.js";
 import "../pages/index.css";
 
 export const api = new Api({
@@ -18,7 +19,7 @@ export const api = new Api({
 });
 let userId;
 const placeInput = document.querySelector(".popup__place");
-const popupImage = document.querySelector('.popup_type_image');
+const popupImage = document.querySelector(".popup_type_image");
 const urlInput = document.querySelector(".popup__url");
 const popupAddCards = document.querySelector(".popup_type_add-cards");
 const container = document.querySelector(".gallery");
@@ -52,6 +53,11 @@ const popupSelectorClass = {
   errorClass: "popup__text-error_active",
 };
 
+const userInfoSelectors = {
+  userName: ".profile__name",
+  userJob: ".profile__occupation",
+};
+
 popupProfileEditButton.addEventListener("click", () => {
   openPopup(popupEditProfile);
   nameInput.value = profileName.textContent;
@@ -70,7 +76,7 @@ popupProfileImageEditButton.addEventListener("click", () => {
   openPopup(popupEditImageProfile);
 });
 // Временная кнопка закрытия попапов.
-const popupClose = new Popup(document.querySelector('.popup'));
+const popupClose = new Popup(document.querySelector(".popup"));
 popupClose.setEventListeners();
 
 //новая валидация полей
@@ -140,18 +146,11 @@ formElementEditImageProfile.addEventListener("submit", (evt) => {
 formElementEditProfile.addEventListener("submit", (evt) => {
   evt.preventDefault();
   loading(true);
-  api
-    .patchProfile(nameInput.value, jobInput.value)
-    .then((res) => {
-      profileName.textContent = res.name;
-      profileOccupation.textContent = res.about;
-      closePopup(popupEditProfile);
-    })
-    .catch((err) => console.log(err))
-    .finally(() => loading(false));
+  const setUser = new UserInfo(userInfoSelectors);
+  setUser.setUserInfo(api, nameInput.value, jobInput.value);
 });
 
-function loading(isLoading) {
+export function loading(isLoading) {
   if (isLoading) {
     document.querySelectorAll(".popup__save-button").forEach((save) => {
       save.value = "Сохранить...";
@@ -175,7 +174,7 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
               const openImage = new PopupWithImage(item, popupImage);
               openImage.open();
               openImage.setEventListeners();
-            }
+            },
           });
           const cardElement = card.generate();
           cardsInitial.setItem(cardElement);
