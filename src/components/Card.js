@@ -1,21 +1,15 @@
-import {
-  openPopup
-} from "./modal.js";
 import {api} from './index.js';
 
-const popupImage = document.querySelector('.popup_type_image');
-const popupCardImage = document.querySelector('.popup__image');
-const popupCaption = document.querySelector('.popup__caption');
-
 export default class Card {
-  constructor(item, selector, idUser) {
+  constructor(item, selector, idUser, {handleCardClick}) {
     this._link = item.link;
     this._name = item.name;
     this._cardId = item._id;
     this._cardLike = item.likes;
     this._selector = selector;
-    this._cardOwnerId = item.owner._id
+    this._cardOwnerId = item.owner._id;
     this._idUser = idUser;
+    this._handleCardClick = handleCardClick;
   }
 
   _getElement() {
@@ -26,13 +20,6 @@ export default class Card {
       .cloneNode(true);
 
     return cardElement;
-  }
-
-  _cardOpenImage() {
-    openPopup(popupImage);
-    popupCardImage.src = this._link;
-    popupCardImage.alt = this._name;
-    popupCaption.textContent = this._name;
   }
 
   _cardDeleteButton() {
@@ -79,13 +66,13 @@ export default class Card {
 
   _setEventListeners() {
     this._element.querySelector('.card__image').addEventListener('click', () => {
-      this._cardOpenImage();
+      this._handleCardClick();
     })
 
     this._element.querySelector('.card__like-button').addEventListener('click', (evt) => {
       this._cardLikeButton(evt);
     })
-    
+
     this._element.querySelector('.card__delete-button').addEventListener('click', () => {
       this._cardDeleteButton();
     })
