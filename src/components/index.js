@@ -2,10 +2,11 @@ import { createCard, renderCard } from "./cards.js";
 import { inactiveButton, activeButton } from "./validate.js"; //enableValidation убрана, inactiveButton, activeButton пока в старом файле
 import { openPopup, closePopup } from "./modal.js";
 import FormValidator from "./FormValidator.js";
-import Api from "./Api.js";
+import Api from "./api.js";
 import Card from "./Card.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
+import PopupWithForm from "./PopupWithForm.js";
 import Popup from "./Popup.js";
 import UserInfo from "./UserInfo.js";
 import "../pages/index.css";
@@ -92,36 +93,33 @@ const avatarChange = new FormValidator(
 );
 avatarChange.enableValidation();
 
-formElementAddCards.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  loading(true);
-  api
-    .postAddCard(placeInput.value, urlInput.value)
-    .then((card) => {
-      renderCard(
-        container,
-        createCard(
-          card.link,
-          card.name,
-          card._id,
-          card.likes.length,
-          card.likes
-        )
+const submitButton = new PopupWithForm(popupAddCards, {
+  submitFormCallBack: () => {
+    api.postAddCard(placeInput.value, urlInput.value).then((cards) => {
+      console.log(cards);
+      const cardInitial = new Section(
+        {
+          items: cards,
+          renderer: (item) => {
+            const card = new Card(item, "#card-template", userId, {
+              handleCardClick: () => {
+                const openImage = new PopupWithImage(item, popupImage);
+                openImage.open();
+                openImage.setEventListeners();
+              },
+            });
+            const cardElement = card.generate();
+            cardInitial.addItem(cardElement);
+          },
+        },
+        container
       );
-      document
-        .querySelector(".card__delete-button")
-        .classList.add("card__delete-button_visible");
-      closePopup(popupAddCards);
-      //неактивная кнопка из старого функционала, надо подумать куда переместить
-      inactiveButton(
-        popupAddCards.querySelector(popupSelectorClass.submitButtonSelector),
-        popupSelectorClass
-      );
-      document.forms.addCard.reset();
-    })
-    .catch((err) => console.log(err))
-    .finally(() => loading(false));
+      cardInitial.renderer();
+    });
+  },
 });
+
+submitButton.setEventListeners();
 
 formElementEditImageProfile.addEventListener("submit", (evt) => {
   evt.preventDefault();

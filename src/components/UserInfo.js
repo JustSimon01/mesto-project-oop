@@ -1,4 +1,5 @@
-import Api from "./Api.js";
+import Api from "./api.js";
+
 import { openPopup, closePopup } from "./modal.js";
 import { loading } from "./index.js";
 
