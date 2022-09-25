@@ -2,9 +2,9 @@ import Popup from "./Popup.js";
 import Api from "./api";
 
 export default class PopupWithForm extends Popup {
-  constructor(selector /*, submitFormCallBack*/) {
+  constructor(selector, { submitFormCallBack }) {
     super(selector);
-    // this._submitFormCallBack = submitFormCallBack;
+    this._submitFormCallBack = submitFormCallBack;
   }
 
   _getInputValues() {
@@ -19,11 +19,19 @@ export default class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  _setEventListeners() {
-    super._setEventListeners();
+  setEventListeners() {
+    super.setEventListeners();
     this._selector.addEventListener("submit", (evt) => {
+      evt.preventDefault();
+      this._submitFormCallBack();
       //подстваляем api для отправки из submitFormCallBack
+      this.close();
     });
+  }
+
+  close() {
+    super.close();
+    this._selector.querySelector(".popup__form").reset();
   }
 
   /*

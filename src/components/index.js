@@ -93,38 +93,33 @@ const avatarChange = new FormValidator(
 );
 avatarChange.enableValidation();
 
-formElementAddCards.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  const buttonCheck = new PopupWithForm(formElementAddCards);
-  buttonCheck._getInputValues();
-  loading(true);
-  api
-    .postAddCard(placeInput.value, urlInput.value)
-    .then((card) => {
-      renderCard(
-        container,
-        createCard(
-          card.link,
-          card.name,
-          card._id,
-          card.likes.length,
-          card.likes
-        )
+const submitButton = new PopupWithForm(popupAddCards, {
+  submitFormCallBack: () => {
+    api.postAddCard(placeInput.value, urlInput.value).then((cards) => {
+      console.log(cards);
+      const cardInitial = new Section(
+        {
+          items: cards,
+          renderer: (item) => {
+            const card = new Card(item, "#card-template", userId, {
+              handleCardClick: () => {
+                const openImage = new PopupWithImage(item, popupImage);
+                openImage.open();
+                openImage.setEventListeners();
+              },
+            });
+            const cardElement = card.generate();
+            cardInitial.addItem(cardElement);
+          },
+        },
+        container
       );
-      document
-        .querySelector(".card__delete-button")
-        .classList.add("card__delete-button_visible");
-      closePopup(popupAddCards);
-      //неактивная кнопка из старого функционала, надо подумать куда переместить
-      inactiveButton(
-        popupAddCards.querySelector(popupSelectorClass.submitButtonSelector),
-        popupSelectorClass
-      );
-      document.forms.addCard.reset();
-    })
-    .catch((err) => console.log(err))
-    .finally(() => loading(false));
+      cardInitial.renderer();
+    });
+  },
 });
+
+submitButton.setEventListeners();
 
 formElementEditImageProfile.addEventListener("submit", (evt) => {
   evt.preventDefault();
