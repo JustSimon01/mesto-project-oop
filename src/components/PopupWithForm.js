@@ -2,15 +2,28 @@ import Popup from "./Popup.js";
 import Api from "./api";
 
 export default class PopupWithForm extends Popup {
-  constructor(selector, submitFormCallBack) {
+  constructor(selector /*, submitFormCallBack*/) {
     super(selector);
-    this._submitFormCallBack = submitFormCallBack;
+    // this._submitFormCallBack = submitFormCallBack;
   }
 
-  _getInputValues() {}
+  _getInputValues() {
+    this._inputList = this._selector.querySelectorAll(".popup__text");
+    console.log(this._selector);
+    this._formValues = {};
+    this._inputList.forEach((input) => {
+      this._formValues[input.name] = input.value;
+    });
+    console.log(this._formValues);
+    // возвращаем объект значений
+    return this._formValues;
+  }
 
   _setEventListeners() {
     super._setEventListeners();
+    this._selector.addEventListener("submit", (evt) => {
+      //подстваляем api для отправки из submitFormCallBack
+    });
   }
 
   /*

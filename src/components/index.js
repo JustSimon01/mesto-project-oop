@@ -2,10 +2,11 @@ import { createCard, renderCard } from "./cards.js";
 import { inactiveButton, activeButton } from "./validate.js"; //enableValidation убрана, inactiveButton, activeButton пока в старом файле
 import { openPopup, closePopup } from "./modal.js";
 import FormValidator from "./FormValidator.js";
-import Api from "./Api.js";
+import Api from "./api.js";
 import Card from "./Card.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
+import PopupWithForm from "./PopupWithForm.js";
 import Popup from "./Popup.js";
 import UserInfo from "./UserInfo.js";
 import "../pages/index.css";
@@ -94,6 +95,8 @@ avatarChange.enableValidation();
 
 formElementAddCards.addEventListener("submit", (evt) => {
   evt.preventDefault();
+  const buttonCheck = new PopupWithForm(formElementAddCards);
+  buttonCheck._getInputValues();
   loading(true);
   api
     .postAddCard(placeInput.value, urlInput.value)
