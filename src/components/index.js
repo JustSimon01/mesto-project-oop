@@ -32,7 +32,7 @@ import {
 } from './constants.js';
 import "../pages/index.css";
 
-export const api = new Api({
+const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-14",
   headers: {
     authorization: "21ec355f-df00-4771-88de-f3c59b8377f4",
@@ -43,7 +43,7 @@ let userId;
 
 //открытие попапа редактирования профиля
 popupProfileEditButton.addEventListener("click", () => {
-  openPopup(popupEditProfile);
+  submitUser.open();
   nameInput.value = profileName.textContent;
   jobInput.value = profileOccupation.textContent;
   //активная кнопка из старого функционала, надо подумать куда переместить
@@ -54,18 +54,14 @@ popupProfileEditButton.addEventListener("click", () => {
 });
 //открытие попапа добавления карточек
 popupProfileAddButton.addEventListener("click", () => {
-  openPopup(popupAddCards);
+  submitButton.open();
 });
 
 //открытие попапа смены аватара
 popupProfileImageEditButton.addEventListener("click", () => {
   imageEditInput.value = "";
-  openPopup(popupEditImageProfile);
+  submitAvatar.open();
 });
-
-// Временная кнопка закрытия попапов.
-const popupClose = new Popup(document.querySelector(".popup"));
-popupClose.setEventListeners();
 
 //новая валидация полей
 const userInfo = new FormValidator(popupSelectorClass, formElementEditProfile);
@@ -94,7 +90,7 @@ const submitButton = new PopupWithForm(popupAddCards, {
               const card = new Card(item, "#card-template", userId, {
                 handleCardClick: () => {
                   const openImage = new PopupWithImage(item, popupImage);
-                  openImage.open();
+                  openImage.open(popupImage);
                   openImage.setEventListeners();
                 },
                 handlePutLikeCard: (evt, cardId, element) => {
