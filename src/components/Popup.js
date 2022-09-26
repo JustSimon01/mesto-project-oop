@@ -1,4 +1,4 @@
-const popupCloseButtons = document.querySelectorAll(".popup__close-button");
+import {popupCloseButtons} from './constants.js';
 
 export default class Popup {
   constructor(selector) {

@@ -9,6 +9,27 @@ import PopupWithImage from "./PopupWithImage.js";
 import PopupWithForm from "./PopupWithForm.js";
 import Popup from "./Popup.js";
 import UserInfo from "./UserInfo.js";
+import {
+  popupImage,
+  popupAddCards,
+  container,
+  imageProfile,
+  imageEditInput,
+  popupEditImageProfile,
+  profileName,
+  profileOccupation,
+  nameInput,
+  jobInput,
+  popupEditProfile,
+  popupProfileEditButton,
+  popupProfileAddButton,
+  popupProfileImageEditButton,
+  formElementEditProfile,
+  formElementAddCards,
+  formElementEditImageProfile,
+  popupSelectorClass,
+  userInfoSelectors
+} from './constants.js';
 import "../pages/index.css";
 
 export const api = new Api({
@@ -19,46 +40,7 @@ export const api = new Api({
   },
 });
 let userId;
-const placeInput = document.querySelector(".popup__place");
-const popupImage = document.querySelector(".popup_type_image");
-const urlInput = document.querySelector(".popup__url");
-const popupAddCards = document.querySelector(".popup_type_add-cards");
-const container = document.querySelector(".gallery");
-const imageProfile = document.querySelector(".profile__image");
-const imageEditInput = document.querySelector(".popup__edit-image");
-const popupEditImageProfile = document.querySelector(
-  ".popup_type_edit-profile-image"
-);
-const profileName = document.querySelector(".profile__name");
-const profileOccupation = document.querySelector(".profile__occupation");
-const nameInput = document.querySelector(".popup__name");
-const jobInput = document.querySelector(".popup__job");
-const popupEditProfile = document.querySelector(".popup_type_edit-profile");
-const popupCloseButton = document.querySelectorAll(".popup__close-button");
-const popupProfileEditButton = document.querySelector(".profile__edit-button");
-const popupProfileAddButton = document.querySelector(".profile__add-button");
-const popupProfileImageEditButton = document.querySelector(
-  ".profile__image-edit"
-);
-const formElementEditProfile = popupEditProfile.querySelector(".popup__form");
-const formElementAddCards = popupAddCards.querySelector(".popup__form");
-const formElementEditImageProfile =
-  popupEditImageProfile.querySelector(".popup__form");
 
-const popupSelectorClass = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__text",
-  submitButtonSelector: ".popup__save-button",
-  inactiveButtonClass: "popup__save-button_inactive",
-  inputErrorClass: "popup__text_type_error",
-  errorClass: "popup__text-error_active",
-};
-
-const userInfoSelectors = {
-  userName: ".profile__name",
-  userJob: ".profile__occupation",
-  userAvatar: ".profile__image",
-};
 //открытие попапа редактирования профиля
 popupProfileEditButton.addEventListener("click", () => {
   openPopup(popupEditProfile);
@@ -115,6 +97,29 @@ const submitButton = new PopupWithForm(popupAddCards, {
                   openImage.open();
                   openImage.setEventListeners();
                 },
+                handlePutLikeCard: (evt, cardId, element) => {
+                  api.putLikeCard(cardId)
+                    .then(res => {
+                      element.querySelector('.card__like-count').textContent = res.likes.length;
+                      evt.target.classList.add('card__like-button_active');
+                    })
+                    .catch(err => console.log(err));
+                },
+                handleDeleteLikeCard: (evt, cardId, element) => {
+                  api.deleteLikeCard(cardId)
+                    .then(res => {
+                      element.querySelector('.card__like-count').textContent = res.likes.length;
+                      evt.target.classList.remove('card__like-button_active');
+                    })
+                    .catch(err => console.log(err));
+                },
+                handleDeleteCard: (cardId, cardItem) => {
+                  api.deleteCard(cardId)
+                    .then(() => {
+                      cardItem.closest('.card').remove();
+                    })
+                    .catch(err => console.log(err));
+                }
               });
               const cardElement = card.generate();
               cardInitial.addItem(cardElement);
@@ -199,6 +204,29 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
               openImage.open();
               openImage.setEventListeners();
             },
+            handlePutLikeCard: (evt, cardId, element) => {
+              api.putLikeCard(cardId)
+                .then(res => {
+                  element.querySelector('.card__like-count').textContent = res.likes.length;
+                  evt.target.classList.add('card__like-button_active');
+                })
+                .catch(err => console.log(err));
+            },
+            handleDeleteLikeCard: (evt, cardId, element) => {
+              api.deleteLikeCard(cardId)
+                .then(res => {
+                  element.querySelector('.card__like-count').textContent = res.likes.length;
+                  evt.target.classList.remove('card__like-button_active');
+                })
+                .catch(err => console.log(err));
+            },
+            handleDeleteCard: (cardId, cardItem) => {
+              api.deleteCard(cardId)
+                .then(() => {
+                  cardItem.closest('.card').remove();
+                })
+                .catch(err => console.log(err));
+            }
           });
           const cardElement = card.generate();
           cardsInitial.setItem(cardElement);

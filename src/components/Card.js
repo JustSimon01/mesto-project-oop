@@ -1,7 +1,5 @@
-import {api} from './index.js';
-
 export default class Card {
-  constructor(item, selector, idUser, {handleCardClick}) {
+  constructor(item, selector, idUser, {handleCardClick, handlePutLikeCard, handleDeleteLikeCard, handleDeleteCard}) {
     this._link = item.link;
     this._name = item.name;
     this._cardId = item._id;
@@ -10,6 +8,9 @@ export default class Card {
     this._cardOwnerId = item.owner._id;
     this._idUser = idUser;
     this._handleCardClick = handleCardClick;
+    this._handlePutLikeCard = handlePutLikeCard;
+    this._handleDeleteLikeCard = handleDeleteLikeCard;
+    this._handleDeleteCard = handleDeleteCard;
   }
 
   _getElement() {
@@ -24,11 +25,7 @@ export default class Card {
 
   _cardDeleteButton() {
     const cardItem = this._element.querySelector('.card__delete-button');
-    api.deleteCard(this._cardId)
-      .then(() => {
-        cardItem.closest('.card').remove();
-      })
-      .catch(err => console.log(err));
+    this._handleDeleteCard(this._cardId, cardItem);
   }
 
   _setDeleteButtons(){
@@ -39,20 +36,10 @@ export default class Card {
 
   _cardLikeButton(evt) {
     if (this._element.querySelector('.card__like-button').classList.contains('card__like-button_active')) {
-      api.deleteLikeCard(this._cardId)
-        .then(res => {
-          this._element.querySelector('.card__like-count').textContent = res.likes.length;
-          evt.target.classList.remove('card__like-button_active');
-        })
-        .catch(err => console.log(err));
+      this._handleDeleteLikeCard(evt, this._cardId, this._element);
     }
     if (!this._element.querySelector('.card__like-button').classList.contains('card__like-button_active')) {
-      api.putLikeCard(this._cardId)
-        .then(res => {
-          this._element.querySelector('.card__like-count').textContent = res.likes.length;
-          evt.target.classList.add('card__like-button_active');
-        })
-        .catch(err => console.log(err));
+      this._handlePutLikeCard(evt, this._cardId, this._element);
     }
   }
 
