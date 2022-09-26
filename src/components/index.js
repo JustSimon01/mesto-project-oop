@@ -57,8 +57,9 @@ const popupSelectorClass = {
 const userInfoSelectors = {
   userName: ".profile__name",
   userJob: ".profile__occupation",
+  userAvatar: ".profile__image",
 };
-
+//открытие попапа редактирования профиля
 popupProfileEditButton.addEventListener("click", () => {
   openPopup(popupEditProfile);
   nameInput.value = profileName.textContent;
@@ -69,13 +70,17 @@ popupProfileEditButton.addEventListener("click", () => {
     popupSelectorClass
   );
 });
+//открытие попапа добавления карточек
 popupProfileAddButton.addEventListener("click", () => {
   openPopup(popupAddCards);
 });
+
+//открытие попапа смены аватара
 popupProfileImageEditButton.addEventListener("click", () => {
   imageEditInput.value = "";
   openPopup(popupEditImageProfile);
 });
+
 // Временная кнопка закрытия попапов.
 const popupClose = new Popup(document.querySelector(".popup"));
 popupClose.setEventListeners();
@@ -93,61 +98,81 @@ const avatarChange = new FormValidator(
 );
 avatarChange.enableValidation();
 
+//добавление карточки
 const submitButton = new PopupWithForm(popupAddCards, {
-  submitFormCallBack: () => {
-    api.postAddCard(placeInput.value, urlInput.value).then((cards) => {
-      console.log(cards);
-      const cardInitial = new Section(
-        {
-          items: cards,
-          renderer: (item) => {
-            const card = new Card(item, "#card-template", userId, {
-              handleCardClick: () => {
-                const openImage = new PopupWithImage(item, popupImage);
-                openImage.open();
-                openImage.setEventListeners();
-              },
-            });
-            const cardElement = card.generate();
-            cardInitial.addItem(cardElement);
+  submitFormCallBack: (formData) => {
+    loading(true);
+    api
+      .postAddCard(formData.place, formData.url)
+      .then((cards) => {
+        const cardInitial = new Section(
+          {
+            items: cards,
+            renderer: (item) => {
+              const card = new Card(item, "#card-template", userId, {
+                handleCardClick: () => {
+                  const openImage = new PopupWithImage(item, popupImage);
+                  openImage.open();
+                  openImage.setEventListeners();
+                },
+              });
+              const cardElement = card.generate();
+              cardInitial.addItem(cardElement);
+            },
           },
-        },
-        container
-      );
-      cardInitial.renderer();
-    });
+          container
+        );
+        cardInitial.renderer();
+        inactiveButton(
+          popupAddCards.querySelector(popupSelectorClass.submitButtonSelector),
+          popupSelectorClass
+        );
+      })
+      .catch((err) => console.log(err))
+      .finally(() => loading(false));
   },
 });
-
 submitButton.setEventListeners();
 
-formElementEditImageProfile.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  loading(true);
-  api
-    .patchAvatar(imageEditInput.value)
-    .then((res) => {
-      imageProfile.src = res.avatar;
-      closePopup(popupEditImageProfile);
-      //неактивная кнопка из старого функционала, надо подумать куда переместить
-      inactiveButton(
-        popupEditImageProfile.querySelector(
-          popupSelectorClass.submitButtonSelector
-        ),
-        popupSelectorClass
-      );
-    })
-    .catch((err) => console.log(err))
-    .finally(() => loading(false));
+//имя и работа в профиле
+const submitUser = new PopupWithForm(popupEditProfile, {
+  submitFormCallBack: (formData) => {
+    api
+      .patchProfile(formData.name, formData.occupation)
+      .then(() => {
+        const setUser = new UserInfo(userInfoSelectors);
+        setUser.setUserInfo(formData.name, formData.occupation);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => loading(false));
+  },
 });
+submitUser.setEventListeners();
 
-formElementEditProfile.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  loading(true);
-  const setUser = new UserInfo(userInfoSelectors);
-  setUser.setUserInfo(api, nameInput.value, jobInput.value);
+//смена аватара
+const submitAvatar = new PopupWithForm(popupEditImageProfile, {
+  submitFormCallBack: (formData) => {
+    loading(true);
+    api
+      .patchAvatar(formData.url)
+      .then(() => {
+        const setUser = new UserInfo(userInfoSelectors);
+        setUser.setUserAvatar(formData.url);
+        //неактивная кнопка из старого функционала, надо подумать куда переместить
+        inactiveButton(
+          popupEditImageProfile.querySelector(
+            popupSelectorClass.submitButtonSelector
+          ),
+          popupSelectorClass
+        );
+      })
+      .catch((err) => console.log(err))
+      .finally(() => loading(false));
+  },
 });
+submitAvatar.setEventListeners();
 
+//смена кнопки загрузки
 export function loading(isLoading) {
   if (isLoading) {
     document.querySelectorAll(".popup__save-button").forEach((save) => {
@@ -160,6 +185,7 @@ export function loading(isLoading) {
   }
 }
 
+//первичная подгрузка карточек
 Promise.all([api.getInitialCards(), api.getInfoUsers()])
   .then(([cards, data]) => {
     userId = data._id;
