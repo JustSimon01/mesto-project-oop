@@ -5,7 +5,6 @@ export default class PopupWithForm extends Popup {
     super(selector);
     this._submitFormCallBack = submitFormCallBack;
   }
-
   _getInputValues() {
     this._inputList = this._selector.querySelectorAll(".popup__text");
     this._formValues = {};
@@ -23,11 +22,22 @@ export default class PopupWithForm extends Popup {
       this._getInputValues();
       this._submitFormCallBack(this._getInputValues());
       //подстваляем api для отправки из submitFormCallBack
-      this.close();
     });
   }
 
-  _loading(isLoading) {
+  inactiveButton(buttonElement, selectorClass) {
+    const submitButton = this._selector.querySelector(buttonElement);
+    submitButton.classList.add(selectorClass);
+    submitButton.setAttribute("disabled", "disabled");
+  }
+
+  activeButton(buttonElement, selectorClass) {
+    const submitButton = this._selector.querySelector(buttonElement);
+    submitButton.classList.remove(selectorClass);
+    submitButton.removeAttribute("disabled");
+  }
+
+  loading(isLoading) {
     if (isLoading) {
       this._selector.querySelector(".popup__save-button").value =
         "Сохранить...";
