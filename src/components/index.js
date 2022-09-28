@@ -1,6 +1,3 @@
-import { createCard, renderCard } from "./cards.js";
-import { inactiveButton, activeButton } from "./validate.js"; //enableValidation убрана, inactiveButton, activeButton пока в старом файле
-import { openPopup, closePopup } from "./modal.js";
 import FormValidator from "./FormValidator.js";
 import Api from "./api.js";
 import Card from "./Card.js";
@@ -28,8 +25,8 @@ import {
   formElementAddCards,
   formElementEditImageProfile,
   popupSelectorClass,
-  userInfoSelectors
-} from './constants.js';
+  userInfoSelectors,
+} from "./constants.js";
 import "../pages/index.css";
 
 const api = new Api({
@@ -47,9 +44,9 @@ popupProfileEditButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileOccupation.textContent;
   //активная кнопка из старого функционала, надо подумать куда переместить
-  activeButton(
-    popupEditProfile.querySelector(popupSelectorClass.submitButtonSelector),
-    popupSelectorClass
+  submitUser.activeButton(
+    popupSelectorClass.submitButtonSelector,
+    popupSelectorClass.inactiveButtonClass
   );
 });
 //открытие попапа добавления карточек
@@ -79,7 +76,7 @@ avatarChange.enableValidation();
 //добавление карточки
 const submitButton = new PopupWithForm(popupAddCards, {
   submitFormCallBack: (formData) => {
-    loading(true);
+    submitButton.loading(true);
     api
       .postAddCard(formData.place, formData.url)
       .then((cards) => {
@@ -94,28 +91,33 @@ const submitButton = new PopupWithForm(popupAddCards, {
                   openImage.setEventListeners();
                 },
                 handlePutLikeCard: (evt, cardId, element) => {
-                  api.putLikeCard(cardId)
-                    .then(res => {
-                      element.querySelector('.card__like-count').textContent = res.likes.length;
-                      evt.target.classList.add('card__like-button_active');
+                  api
+                    .putLikeCard(cardId)
+                    .then((res) => {
+                      element.querySelector(".card__like-count").textContent =
+                        res.likes.length;
+                      evt.target.classList.add("card__like-button_active");
                     })
-                    .catch(err => console.log(err));
+                    .catch((err) => console.log(err));
                 },
                 handleDeleteLikeCard: (evt, cardId, element) => {
-                  api.deleteLikeCard(cardId)
-                    .then(res => {
-                      element.querySelector('.card__like-count').textContent = res.likes.length;
-                      evt.target.classList.remove('card__like-button_active');
+                  api
+                    .deleteLikeCard(cardId)
+                    .then((res) => {
+                      element.querySelector(".card__like-count").textContent =
+                        res.likes.length;
+                      evt.target.classList.remove("card__like-button_active");
                     })
-                    .catch(err => console.log(err));
+                    .catch((err) => console.log(err));
                 },
                 handleDeleteCard: (cardId, cardItem) => {
-                  api.deleteCard(cardId)
+                  api
+                    .deleteCard(cardId)
                     .then(() => {
-                      cardItem.closest('.card').remove();
+                      cardItem.closest(".card").remove();
                     })
-                    .catch(err => console.log(err));
-                }
+                    .catch((err) => console.log(err));
+                },
               });
               const cardElement = card.generate();
               cardInitial.addItem(cardElement);
@@ -124,67 +126,57 @@ const submitButton = new PopupWithForm(popupAddCards, {
           container
         );
         cardInitial.renderer();
-        inactiveButton(
-          popupAddCards.querySelector(popupSelectorClass.submitButtonSelector),
-          popupSelectorClass
+        submitButton.inactiveButton(
+          popupSelectorClass.submitButtonSelector,
+          popupSelectorClass.inactiveButtonClass
         );
       })
+      .then(() => submitButton.close())
       .catch((err) => console.log(err))
-      .finally(() => loading(false));
+      .finally(() => submitButton.loading(false));
   },
 });
 submitButton.setEventListeners();
 
 //имя и работа в профиле
+const setUser = new UserInfo(userInfoSelectors);
 const submitUser = new PopupWithForm(popupEditProfile, {
   submitFormCallBack: (formData) => {
+    submitUser.loading(true);
     api
       .patchProfile(formData.name, formData.occupation)
       .then(() => {
-        const setUser = new UserInfo(userInfoSelectors);
         setUser.setUserInfo(formData.name, formData.occupation);
       })
+      .then(() => submitUser.close())
       .catch((err) => console.log(err))
-      .finally(() => loading(false));
+      .finally(() => submitUser.loading(false));
   },
 });
+
 submitUser.setEventListeners();
 
 //смена аватара
 const submitAvatar = new PopupWithForm(popupEditImageProfile, {
   submitFormCallBack: (formData) => {
-    loading(true);
+    submitAvatar.loading(true);
     api
       .patchAvatar(formData.url)
       .then(() => {
         const setUser = new UserInfo(userInfoSelectors);
         setUser.setUserAvatar(formData.url);
         //неактивная кнопка из старого функционала, надо подумать куда переместить
-        inactiveButton(
-          popupEditImageProfile.querySelector(
-            popupSelectorClass.submitButtonSelector
-          ),
-          popupSelectorClass
+        submitAvatar.inactiveButton(
+          popupSelectorClass.submitButtonSelector,
+          popupSelectorClass.inactiveButtonClass
         );
       })
+      .then(() => submitAvatar.close())
       .catch((err) => console.log(err))
-      .finally(() => loading(false));
+      .finally(() => submitAvatar.loading(false));
   },
 });
 submitAvatar.setEventListeners();
-
-//смена кнопки загрузки
-export function loading(isLoading) {
-  if (isLoading) {
-    document.querySelectorAll(".popup__save-button").forEach((save) => {
-      save.value = "Сохранить...";
-    });
-  } else {
-    document.querySelectorAll(".popup__save-button").forEach((save) => {
-      save.value = "Сохранить";
-    });
-  }
-}
 
 //первичная подгрузка карточек
 Promise.all([api.getInitialCards(), api.getInfoUsers()])
@@ -201,28 +193,33 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
               openImage.setEventListeners();
             },
             handlePutLikeCard: (evt, cardId, element) => {
-              api.putLikeCard(cardId)
-                .then(res => {
-                  element.querySelector('.card__like-count').textContent = res.likes.length;
-                  evt.target.classList.add('card__like-button_active');
+              api
+                .putLikeCard(cardId)
+                .then((res) => {
+                  element.querySelector(".card__like-count").textContent =
+                    res.likes.length;
+                  evt.target.classList.add("card__like-button_active");
                 })
-                .catch(err => console.log(err));
+                .catch((err) => console.log(err));
             },
             handleDeleteLikeCard: (evt, cardId, element) => {
-              api.deleteLikeCard(cardId)
-                .then(res => {
-                  element.querySelector('.card__like-count').textContent = res.likes.length;
-                  evt.target.classList.remove('card__like-button_active');
+              api
+                .deleteLikeCard(cardId)
+                .then((res) => {
+                  element.querySelector(".card__like-count").textContent =
+                    res.likes.length;
+                  evt.target.classList.remove("card__like-button_active");
                 })
-                .catch(err => console.log(err));
+                .catch((err) => console.log(err));
             },
             handleDeleteCard: (cardId, cardItem) => {
-              api.deleteCard(cardId)
+              api
+                .deleteCard(cardId)
                 .then(() => {
-                  cardItem.closest('.card').remove();
+                  cardItem.closest(".card").remove();
                 })
-                .catch(err => console.log(err));
-            }
+                .catch((err) => console.log(err));
+            },
           });
           const cardElement = card.generate();
           cardsInitial.setItem(cardElement);
