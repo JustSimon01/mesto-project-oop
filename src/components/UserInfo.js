@@ -1,3 +1,8 @@
+import {
+  nameInput,
+  jobInput
+} from './constants.js';
+
 export default class UserInfo {
   constructor({ userName, userJob, userAvatar }) {
     this._userName = userName;
@@ -14,7 +19,6 @@ export default class UserInfo {
     const profileOccupation = document.querySelector(this._userJob);
     profileName.textContent = name;
     profileOccupation.textContent = about;
-    const popupEditProfile = document.querySelector(".popup_type_edit-profile");
   }
 
   setUserAvatar(avatar) {
