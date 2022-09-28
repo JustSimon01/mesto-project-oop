@@ -4,7 +4,6 @@ import Card from "./Card.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
 import PopupWithForm from "./PopupWithForm.js";
-import Popup from "./Popup.js";
 import UserInfo from "./UserInfo.js";
 import {
   popupImage,
@@ -43,7 +42,6 @@ popupProfileEditButton.addEventListener("click", () => {
   submitUser.open();
   nameInput.value = profileName.textContent;
   jobInput.value = profileOccupation.textContent;
-  //активная кнопка из старого функционала, надо подумать куда переместить
   submitUser.activeButton(
     popupSelectorClass.submitButtonSelector,
     popupSelectorClass.inactiveButtonClass
@@ -130,8 +128,8 @@ const submitButton = new PopupWithForm(popupAddCards, {
           popupSelectorClass.submitButtonSelector,
           popupSelectorClass.inactiveButtonClass
         );
+        submitButton.close();
       })
-      .then(() => submitButton.close())
       .catch((err) => console.log(err))
       .finally(() => submitButton.loading(false));
   },
@@ -147,8 +145,8 @@ const submitUser = new PopupWithForm(popupEditProfile, {
       .patchProfile(formData.name, formData.occupation)
       .then(() => {
         setUser.setUserInfo(formData.name, formData.occupation);
+        submitUser.close();
       })
-      .then(() => submitUser.close())
       .catch((err) => console.log(err))
       .finally(() => submitUser.loading(false));
   },
@@ -170,8 +168,8 @@ const submitAvatar = new PopupWithForm(popupEditImageProfile, {
           popupSelectorClass.submitButtonSelector,
           popupSelectorClass.inactiveButtonClass
         );
+        submitAvatar.close();
       })
-      .then(() => submitAvatar.close())
       .catch((err) => console.log(err))
       .finally(() => submitAvatar.loading(false));
   },
