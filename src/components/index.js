@@ -1,5 +1,5 @@
 import FormValidator from "./FormValidator.js";
-import Api from "./api.js";
+import Api from "./Api.js";
 import Card from "./Card.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
@@ -72,6 +72,9 @@ const avatarChange = new FormValidator(
 avatarChange.enableValidation();
 
 //добавление карточки
+const openImage = new PopupWithImage(popupImage);
+openImage.setEventListeners();
+
 const submitButton = new PopupWithForm(popupAddCards, {
   submitFormCallBack: (formData) => {
     submitButton.loading(true);
@@ -84,9 +87,7 @@ const submitButton = new PopupWithForm(popupAddCards, {
             renderer: (item) => {
               const card = new Card(item, "#card-template", userId, {
                 handleCardClick: () => {
-                  const openImage = new PopupWithImage(item, popupImage);
-                  openImage.open(popupImage);
-                  openImage.setEventListeners();
+                  openImage.open(item);
                 },
                 handlePutLikeCard: (evt, cardId, element) => {
                   api
@@ -186,8 +187,8 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
         renderer: (item) => {
           const card = new Card(item, "#card-template", userId, {
             handleCardClick: () => {
-              const openImage = new PopupWithImage(item, popupImage);
-              openImage.open();
+              const openImage = new PopupWithImage(popupImage);
+              openImage.open(item);
               openImage.setEventListeners();
             },
             handlePutLikeCard: (evt, cardId, element) => {
