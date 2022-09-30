@@ -1,5 +1,5 @@
 import FormValidator from "./FormValidator.js";
-import Api from "./api.js";
+import Api from "./Api.js";
 import Card from "./Card.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
@@ -25,7 +25,7 @@ import {
   formElementEditImageProfile,
   popupSelectorClass,
   userInfoSelectors,
-} from "./constants.js";
+} from "./utils/constants.js";
 import "../pages/index.css";
 
 const api = new Api({
@@ -35,14 +35,16 @@ const api = new Api({
     "Content-Type": "application/json",
   },
 });
-let userId;
+let userId = "";
+//первичная подгрузка данных
+const setUser = new UserInfo(userInfoSelectors);
 
 //открытие попапа редактирования профиля
 popupProfileEditButton.addEventListener("click", () => {
   submitUser.open();
   nameInput.value = profileName.textContent;
   jobInput.value = profileOccupation.textContent;
-  submitUser.activeButton(
+  submitUser.setActiveButton(
     popupSelectorClass.submitButtonSelector,
     popupSelectorClass.inactiveButtonClass
   );
@@ -50,12 +52,20 @@ popupProfileEditButton.addEventListener("click", () => {
 //открытие попапа добавления карточек
 popupProfileAddButton.addEventListener("click", () => {
   submitButton.open();
+  submitButton.setInactiveButton(
+    popupSelectorClass.submitButtonSelector,
+    popupSelectorClass.inactiveButtonClass
+  );
 });
 
 //открытие попапа смены аватара
 popupProfileImageEditButton.addEventListener("click", () => {
   imageEditInput.value = "";
   submitAvatar.open();
+  submitAvatar.setInactiveButton(
+    popupSelectorClass.submitButtonSelector,
+    popupSelectorClass.inactiveButtonClass
+  );
 });
 
 //новая валидация полей
@@ -124,10 +134,6 @@ const submitButton = new PopupWithForm(popupAddCards, {
           container
         );
         cardInitial.renderer();
-        submitButton.inactiveButton(
-          popupSelectorClass.submitButtonSelector,
-          popupSelectorClass.inactiveButtonClass
-        );
         submitButton.close();
       })
       .catch((err) => console.log(err))
@@ -137,14 +143,13 @@ const submitButton = new PopupWithForm(popupAddCards, {
 submitButton.setEventListeners();
 
 //имя и работа в профиле
-const setUser = new UserInfo(userInfoSelectors);
 const submitUser = new PopupWithForm(popupEditProfile, {
   submitFormCallBack: (formData) => {
     submitUser.loading(true);
     api
       .patchProfile(formData.name, formData.occupation)
       .then(() => {
-        setUser.setUserInfo(formData.name, formData.occupation);
+        setUser.setUserInfo(formData, userId);
         submitUser.close();
       })
       .catch((err) => console.log(err))
@@ -161,13 +166,7 @@ const submitAvatar = new PopupWithForm(popupEditImageProfile, {
     api
       .patchAvatar(formData.url)
       .then(() => {
-        const setUser = new UserInfo(userInfoSelectors);
         setUser.setUserAvatar(formData.url);
-        //неактивная кнопка из старого функционала, надо подумать куда переместить
-        submitAvatar.inactiveButton(
-          popupSelectorClass.submitButtonSelector,
-          popupSelectorClass.inactiveButtonClass
-        );
         submitAvatar.close();
       })
       .catch((err) => console.log(err))
@@ -177,8 +176,10 @@ const submitAvatar = new PopupWithForm(popupEditImageProfile, {
 submitAvatar.setEventListeners();
 
 //первичная подгрузка карточек
-Promise.all([api.getInitialCards(), api.getInfoUsers()])
-  .then(([cards, data]) => {
+Promise.all([api.getInfoUsers(), api.getInitialCards()])
+  .then(([data, cards]) => {
+    setUser.setUserInfo(data);
+    setUser.setUserAvatar(data.avatar);
     userId = data._id;
     const cardsInitial = new Section(
       {
@@ -225,10 +226,6 @@ Promise.all([api.getInitialCards(), api.getInfoUsers()])
       },
       container
     );
-    cardsInitial.renderItems();
-
-    profileName.textContent = data.name;
-    profileOccupation.textContent = data.about;
-    imageProfile.src = data.avatar;
+    cardsInitial.renderItems(cards);
   })
   .catch((err) => console.log(err));

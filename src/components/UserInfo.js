@@ -1,7 +1,4 @@
-import {
-  nameInput,
-  jobInput
-} from './constants.js';
+import { nameInput, jobInput } from "./utils/constants.js";
 
 export default class UserInfo {
   constructor({ userName, userJob, userAvatar }) {
@@ -11,14 +8,17 @@ export default class UserInfo {
   }
 
   getUserInfo(api) {
-    api.getInfoUsers();
+    api.getInfoUsers().then((res) => {
+      return (userId = res);
+    });
   }
 
-  setUserInfo(name, about) {
+  setUserInfo(data) {
     const profileName = document.querySelector(this._userName);
     const profileOccupation = document.querySelector(this._userJob);
-    profileName.textContent = name;
-    profileOccupation.textContent = about;
+    profileName.textContent = data.name;
+    profileOccupation.textContent = data.about;
+    let userId = data._id;
   }
 
   setUserAvatar(avatar) {
