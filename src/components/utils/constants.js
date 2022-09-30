@@ -10,14 +10,23 @@ export const profileName = document.querySelector(".profile__name");
 export const profileOccupation = document.querySelector(".profile__occupation");
 export const nameInput = document.querySelector(".popup__name");
 export const jobInput = document.querySelector(".popup__job");
-export const popupEditProfile = document.querySelector(".popup_type_edit-profile");
-export const popupCloseButtons = document.querySelectorAll(".popup__close-button");
-export const popupProfileEditButton = document.querySelector(".profile__edit-button");
-export const popupProfileAddButton = document.querySelector(".profile__add-button");
+export const popupEditProfile = document.querySelector(
+  ".popup_type_edit-profile"
+);
+export const popupCloseButtons = document.querySelectorAll(
+  ".popup__close-button"
+);
+export const popupProfileEditButton = document.querySelector(
+  ".profile__edit-button"
+);
+export const popupProfileAddButton = document.querySelector(
+  ".profile__add-button"
+);
 export const popupProfileImageEditButton = document.querySelector(
   ".profile__image-edit"
 );
-export const formElementEditProfile = popupEditProfile.querySelector(".popup__form");
+export const formElementEditProfile =
+  popupEditProfile.querySelector(".popup__form");
 export const formElementAddCards = popupAddCards.querySelector(".popup__form");
 export const formElementEditImageProfile =
   popupEditImageProfile.querySelector(".popup__form");
@@ -36,5 +45,5 @@ export const userInfoSelectors = {
   userJob: ".profile__occupation",
   userAvatar: ".profile__image",
 };
-export const popupCardImage = document.querySelector('.popup__image');
-export const popupCaption = document.querySelector('.popup__caption');
+export const popupCardImage = document.querySelector(".popup__image");
+export const popupCaption = document.querySelector(".popup__caption");

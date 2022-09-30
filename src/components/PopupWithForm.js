@@ -25,13 +25,13 @@ export default class PopupWithForm extends Popup {
     });
   }
 
-  inactiveButton(buttonElement, selectorClass) {
+  setInactiveButton(buttonElement, selectorClass) {
     const submitButton = this._selector.querySelector(buttonElement);
     submitButton.classList.add(selectorClass);
     submitButton.setAttribute("disabled", "disabled");
   }
 
-  activeButton(buttonElement, selectorClass) {
+  setActiveButton(buttonElement, selectorClass) {
     const submitButton = this._selector.querySelector(buttonElement);
     submitButton.classList.remove(selectorClass);
     submitButton.removeAttribute("disabled");

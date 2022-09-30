@@ -65,21 +65,21 @@ export default class FormValidator {
     });
   }
 
-  _inactiveButton(buttonElement) {
+  _setInactiveButton(buttonElement) {
     buttonElement.classList.add(this._settings.inactiveButtonClass);
     buttonElement.setAttribute("disabled", "disabled");
   }
 
-  _activeButton(buttonElement) {
+  _setActiveButton(buttonElement) {
     buttonElement.classList.remove(this._settings.inactiveButtonClass);
     buttonElement.removeAttribute("disabled");
   }
 
   _toggleButtonState(inputList, buttonElement) {
     if (this._hasInvalidInput(inputList)) {
-      this._inactiveButton(buttonElement);
+      this._setInactiveButton(buttonElement);
     } else {
-      this._activeButton(buttonElement);
+      this._setActiveButton(buttonElement);
     }
   }
 

@@ -1,5 +1,15 @@
 export default class Card {
-  constructor(item, selector, idUser, {handleCardClick, handlePutLikeCard, handleDeleteLikeCard, handleDeleteCard}) {
+  constructor(
+    item,
+    selector,
+    idUser,
+    {
+      handleCardClick,
+      handlePutLikeCard,
+      handleDeleteLikeCard,
+      handleDeleteCard,
+    }
+  ) {
     this._link = item.link;
     this._name = item.name;
     this._cardId = item._id;
@@ -16,53 +26,71 @@ export default class Card {
   _getElement() {
     const cardElement = document
       .querySelector(this._selector)
-      .content
-      .querySelector('.card')
+      .content.querySelector(".card")
       .cloneNode(true);
 
     return cardElement;
   }
 
-  _cardDeleteButton() {
-    const cardItem = this._element.querySelector('.card__delete-button');
+  _deleteCardButton() {
+    const cardItem = this._element.querySelector(".card__delete-button");
     this._handleDeleteCard(this._cardId, cardItem);
   }
 
-  _setDeleteButtons(){
-    if (this._idUser === this._cardOwnerId){
-      this._element.querySelector('.card__delete-button').classList.add('card__delete-button_visible');
+  _setDeleteButtons() {
+    if (this._idUser === this._cardOwnerId) {
+      console.log(this._idUser);
+      this._element
+        .querySelector(".card__delete-button")
+        .classList.add("card__delete-button_visible");
     }
   }
 
   _cardLikeButton(evt) {
-    if (this._element.querySelector('.card__like-button').classList.contains('card__like-button_active')) {
+    if (
+      this._element
+        .querySelector(".card__like-button")
+        .classList.contains("card__like-button_active")
+    ) {
       this._handleDeleteLikeCard(evt, this._cardId, this._element);
     }
-    if (!this._element.querySelector('.card__like-button').classList.contains('card__like-button_active')) {
+    if (
+      !this._element
+        .querySelector(".card__like-button")
+        .classList.contains("card__like-button_active")
+    ) {
       this._handlePutLikeCard(evt, this._cardId, this._element);
     }
   }
 
   _setLikeButtons() {
-    this._cardLike.forEach(element => {
-      if (element._id === this._idUser){
-        this._element.querySelector('.card__like-button').classList.add('card__like-button_active');
+    this._cardLike.forEach((element) => {
+      if (element._id === this._idUser) {
+        this._element
+          .querySelector(".card__like-button")
+          .classList.add("card__like-button_active");
       }
     });
   }
 
   _setEventListeners() {
-    this._element.querySelector('.card__image').addEventListener('click', () => {
-      this._handleCardClick();
-    })
+    this._element
+      .querySelector(".card__image")
+      .addEventListener("click", () => {
+        this._handleCardClick();
+      });
 
-    this._element.querySelector('.card__like-button').addEventListener('click', (evt) => {
-      this._cardLikeButton(evt);
-    })
+    this._element
+      .querySelector(".card__like-button")
+      .addEventListener("click", (evt) => {
+        this._cardLikeButton(evt);
+      });
 
-    this._element.querySelector('.card__delete-button').addEventListener('click', () => {
-      this._cardDeleteButton();
-    })
+    this._element
+      .querySelector(".card__delete-button")
+      .addEventListener("click", () => {
+        this._deleteCardButton();
+      });
   }
 
   generate() {
@@ -71,12 +99,12 @@ export default class Card {
     this._setLikeButtons();
     this._setEventListeners();
 
-    this._element.querySelector('.card__image').src = this._link;
-    this._element.querySelector('.card__image').alt = this._name;
-    this._element.querySelector('.card__heading').textContent = this._name;
-    this._element.querySelector('.card__like-count').textContent = this._cardLike.length;
+    this._element.querySelector(".card__image").src = this._link;
+    this._element.querySelector(".card__image").alt = this._name;
+    this._element.querySelector(".card__heading").textContent = this._name;
+    this._element.querySelector(".card__like-count").textContent =
+      this._cardLike.length;
 
     return this._element;
   }
-
 }
