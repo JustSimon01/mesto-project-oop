@@ -39,7 +39,6 @@ export default class Card {
 
   _setDeleteButtons() {
     if (this._idUser === this._cardOwnerId) {
-      console.log(this._idUser);
       this._element
         .querySelector(".card__delete-button")
         .classList.add("card__delete-button_visible");

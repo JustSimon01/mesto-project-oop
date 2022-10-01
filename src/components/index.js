@@ -38,12 +38,14 @@ const api = new Api({
 let userId = "";
 //первичная подгрузка данных
 const setUser = new UserInfo(userInfoSelectors);
-
 //открытие попапа редактирования профиля
 popupProfileEditButton.addEventListener("click", () => {
   submitUser.open();
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileOccupation.textContent;
+
+  const { name, about } = setUser.getUserInfo();
+  nameInput.value = name;
+  jobInput.value = about;
+
   submitUser.setActiveButton(
     popupSelectorClass.submitButtonSelector,
     popupSelectorClass.inactiveButtonClass
@@ -148,8 +150,8 @@ const submitUser = new PopupWithForm(popupEditProfile, {
     submitUser.loading(true);
     api
       .patchProfile(formData.name, formData.occupation)
-      .then(() => {
-        setUser.setUserInfo(formData, userId);
+      .then((res) => {
+        setUser.setUserInfo(res);
         submitUser.close();
       })
       .catch((err) => console.log(err))
@@ -165,8 +167,8 @@ const submitAvatar = new PopupWithForm(popupEditImageProfile, {
     submitAvatar.loading(true);
     api
       .patchAvatar(formData.url)
-      .then(() => {
-        setUser.setUserAvatar(formData.url);
+      .then((res) => {
+        setUser.setUserInfo(res);
         submitAvatar.close();
       })
       .catch((err) => console.log(err))
@@ -179,7 +181,6 @@ submitAvatar.setEventListeners();
 Promise.all([api.getInfoUsers(), api.getInitialCards()])
   .then(([data, cards]) => {
     setUser.setUserInfo(data);
-    setUser.setUserAvatar(data.avatar);
     userId = data._id;
     const cardsInitial = new Section(
       {

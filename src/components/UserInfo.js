@@ -1,28 +1,23 @@
-import { nameInput, jobInput } from "./utils/constants.js";
-
 export default class UserInfo {
   constructor({ userName, userJob, userAvatar }) {
-    this._userName = userName;
-    this._userJob = userJob;
-    this._userAvatar = userAvatar;
+    this._userName = document.querySelector(userName);
+    this._userJob = document.querySelector(userJob);
+    this._userAvatar = document.querySelector(userAvatar);
+    this._userId = "";
   }
 
-  getUserInfo(api) {
-    api.getInfoUsers().then((res) => {
-      return (userId = res);
-    });
+  getUserInfo() {
+    return {
+      name: this._userName.textContent,
+      about: this._userJob.textContent,
+      id: this._userId,
+    };
   }
 
-  setUserInfo(data) {
-    const profileName = document.querySelector(this._userName);
-    const profileOccupation = document.querySelector(this._userJob);
-    profileName.textContent = data.name;
-    profileOccupation.textContent = data.about;
-    let userId = data._id;
-  }
-
-  setUserAvatar(avatar) {
-    const imageProfile = document.querySelector(this._userAvatar);
-    imageProfile.src = avatar;
+  setUserInfo({ name, about, avatar, _id }) {
+    this._userName.textContent = name;
+    this._userJob.textContent = about;
+    this._userAvatar.src = avatar;
+    this._userId = _id;
   }
 }
