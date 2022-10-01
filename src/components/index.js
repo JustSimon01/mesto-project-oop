@@ -84,6 +84,9 @@ const avatarChange = new FormValidator(
 avatarChange.enableValidation();
 
 //добавление карточки
+const openImage = new PopupWithImage(popupImage);
+openImage.setEventListeners();
+
 const submitButton = new PopupWithForm(popupAddCards, {
   submitFormCallBack: (formData) => {
     submitButton.loading(true);
@@ -96,9 +99,7 @@ const submitButton = new PopupWithForm(popupAddCards, {
             renderer: (item) => {
               const card = new Card(item, "#card-template", userId, {
                 handleCardClick: () => {
-                  const openImage = new PopupWithImage(item, popupImage);
-                  openImage.open(popupImage);
-                  openImage.setEventListeners();
+                  openImage.open(item);
                 },
                 handlePutLikeCard: (evt, cardId, element) => {
                   api
@@ -188,9 +189,7 @@ Promise.all([api.getInfoUsers(), api.getInitialCards()])
         renderer: (item) => {
           const card = new Card(item, "#card-template", userId, {
             handleCardClick: () => {
-              const openImage = new PopupWithImage(item, popupImage);
-              openImage.open();
-              openImage.setEventListeners();
+              openImage.open(item);
             },
             handlePutLikeCard: (evt, cardId, element) => {
               api
