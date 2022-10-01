@@ -54,7 +54,6 @@ popupProfileAddButton.addEventListener("click", () => {
 
 //открытие попапа смены аватара
 popupProfileImageEditButton.addEventListener("click", () => {
-  imageEditInput.value = "";
   submitAvatar.open();
   avatarChange.setInactiveButton();
 });
@@ -76,6 +75,46 @@ avatarChange.enableValidation();
 const openImage = new PopupWithImage(popupImage);
 openImage.setEventListeners();
 
+function handlePutLike(card) {
+  api
+  .putLikeCard(card.getId())
+  .then((res) => {
+    card.updatePutLike(res);
+  })
+  .catch((err) => console.log(err));
+}
+
+function handleDeleteLike(card) {
+  api
+  .deleteLikeCard(card.getId())
+  .then((res) => {
+    card.updateDeleteLike(res);
+  })
+  .catch((err) => console.log(err));
+}
+
+function handleDeleteCard(card) {
+  api
+  .deleteCard(card.getId())
+  .then(() => {
+    card.deleteCard();
+  })
+  .catch((err) => console.log(err));
+}
+
+function createCard(item) {
+  const cardElement = new Card(item, "#card-template", userId, {
+    handleCardClick: () => {
+      openImage.open(item);
+    },
+    handlePutLikeCard: handlePutLike,
+    handleDeleteLikeCard: handleDeleteLike,
+    handleDeleteCard: handleDeleteCard,
+  });
+
+  return cardElement;
+}
+
 const submitButton = new PopupWithForm(popupAddCards, {
   submitFormCallBack: (formData) => {
     submitButton.renderLoading(true);
@@ -86,40 +125,7 @@ const submitButton = new PopupWithForm(popupAddCards, {
           {
             items: cards,
             renderer: (item) => {
-              const card = new Card(item, "#card-template", userId, {
-                handleCardClick: () => {
-                  openImage.open(item);
-                },
-                handlePutLikeCard: (evt, cardId, element) => {
-                  api
-                    .putLikeCard(cardId)
-                    .then((res) => {
-                      element.querySelector(".card__like-count").textContent =
-                        res.likes.length;
-                      evt.target.classList.add("card__like-button_active");
-                    })
-                    .catch((err) => console.log(err));
-                },
-                handleDeleteLikeCard: (evt, cardId, element) => {
-                  api
-                    .deleteLikeCard(cardId)
-                    .then((res) => {
-                      element.querySelector(".card__like-count").textContent =
-                        res.likes.length;
-                      evt.target.classList.remove("card__like-button_active");
-                    })
-                    .catch((err) => console.log(err));
-                },
-                handleDeleteCard: (cardId, cardItem) => {
-                  api
-                    .deleteCard(cardId)
-                    .then(() => {
-                      cardItem.closest(".card").remove();
-                    })
-                    .catch((err) => console.log(err));
-                },
-              });
-              const cardElement = card.generate();
+              const cardElement = createCard(item).generate();
               cardInitial.addItem(cardElement);
             },
           },
@@ -176,40 +182,7 @@ Promise.all([api.getInfoUsers(), api.getInitialCards()])
       {
         items: cards,
         renderer: (item) => {
-          const card = new Card(item, "#card-template", userId, {
-            handleCardClick: () => {
-              openImage.open(item);
-            },
-            handlePutLikeCard: (evt, cardId, element) => {
-              api
-                .putLikeCard(cardId)
-                .then((res) => {
-                  element.querySelector(".card__like-count").textContent =
-                    res.likes.length;
-                  evt.target.classList.add("card__like-button_active");
-                })
-                .catch((err) => console.log(err));
-            },
-            handleDeleteLikeCard: (evt, cardId, element) => {
-              api
-                .deleteLikeCard(cardId)
-                .then((res) => {
-                  element.querySelector(".card__like-count").textContent =
-                    res.likes.length;
-                  evt.target.classList.remove("card__like-button_active");
-                })
-                .catch((err) => console.log(err));
-            },
-            handleDeleteCard: (cardId, cardItem) => {
-              api
-                .deleteCard(cardId)
-                .then(() => {
-                  cardItem.closest(".card").remove();
-                })
-                .catch((err) => console.log(err));
-            },
-          });
-          const cardElement = card.generate();
+          const cardElement = createCard(item).generate();
           cardsInitial.setItem(cardElement);
         },
       },
