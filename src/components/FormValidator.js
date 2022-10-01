@@ -8,6 +8,9 @@ export default class FormValidator {
     this._settings.inputErrorClass = settings.inputErrorClass;
     this._settings.errorClass = settings.errorClass;
     this._formElement = formElement;
+    this._buttonElement = this._formElement.querySelector(
+      this._settings.submitButtonSelector
+    );
   }
 
   _showInputError(inputElement, errorMessage) {
@@ -45,16 +48,13 @@ export default class FormValidator {
     const inputList = Array.from(
       this._formElement.querySelectorAll(this._settings.inputSelector)
     );
-    const buttonElement = this._formElement.querySelector(
-      this._settings.submitButtonSelector
-    );
 
-    this._toggleButtonState(inputList, buttonElement);
+    this._toggleButtonState(inputList);
 
     inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(inputElement);
-        this._toggleButtonState(inputList, buttonElement);
+        this._toggleButtonState(inputList);
       });
     });
   }
@@ -65,21 +65,21 @@ export default class FormValidator {
     });
   }
 
-  _setInactiveButton(buttonElement) {
-    buttonElement.classList.add(this._settings.inactiveButtonClass);
-    buttonElement.setAttribute("disabled", "disabled");
+  setInactiveButton() {
+    this._buttonElement.classList.add(this._settings.inactiveButtonClass);
+    this._buttonElement.setAttribute("disabled", "disabled");
   }
 
-  _setActiveButton(buttonElement) {
-    buttonElement.classList.remove(this._settings.inactiveButtonClass);
-    buttonElement.removeAttribute("disabled");
+  setActiveButton() {
+    this._buttonElement.classList.remove(this._settings.inactiveButtonClass);
+    this._buttonElement.removeAttribute("disabled");
   }
 
-  _toggleButtonState(inputList, buttonElement) {
+  _toggleButtonState(inputList) {
     if (this._hasInvalidInput(inputList)) {
-      this._setInactiveButton(buttonElement);
+      this.setInactiveButton();
     } else {
-      this._setActiveButton(buttonElement);
+      this.setActiveButton();
     }
   }
 

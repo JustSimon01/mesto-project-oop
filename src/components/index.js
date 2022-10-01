@@ -41,33 +41,22 @@ const setUser = new UserInfo(userInfoSelectors);
 //открытие попапа редактирования профиля
 popupProfileEditButton.addEventListener("click", () => {
   submitUser.open();
-
   const { name, about } = setUser.getUserInfo();
   nameInput.value = name;
   jobInput.value = about;
-
-  submitUser.setActiveButton(
-    popupSelectorClass.submitButtonSelector,
-    popupSelectorClass.inactiveButtonClass
-  );
+  userInfo.setInactiveButton();
 });
 //открытие попапа добавления карточек
 popupProfileAddButton.addEventListener("click", () => {
   submitButton.open();
-  submitButton.setInactiveButton(
-    popupSelectorClass.submitButtonSelector,
-    popupSelectorClass.inactiveButtonClass
-  );
+  addCard.setInactiveButton();
 });
 
 //открытие попапа смены аватара
 popupProfileImageEditButton.addEventListener("click", () => {
   imageEditInput.value = "";
   submitAvatar.open();
-  submitAvatar.setInactiveButton(
-    popupSelectorClass.submitButtonSelector,
-    popupSelectorClass.inactiveButtonClass
-  );
+  avatarChange.setInactiveButton();
 });
 
 //новая валидация полей
@@ -89,7 +78,7 @@ openImage.setEventListeners();
 
 const submitButton = new PopupWithForm(popupAddCards, {
   submitFormCallBack: (formData) => {
-    submitButton.loading(true);
+    submitButton.renderLoading(true);
     api
       .postAddCard(formData.place, formData.url)
       .then((cards) => {
@@ -140,7 +129,7 @@ const submitButton = new PopupWithForm(popupAddCards, {
         submitButton.close();
       })
       .catch((err) => console.log(err))
-      .finally(() => submitButton.loading(false));
+      .finally(() => submitButton.renderLoading(false));
   },
 });
 submitButton.setEventListeners();
@@ -148,7 +137,7 @@ submitButton.setEventListeners();
 //имя и работа в профиле
 const submitUser = new PopupWithForm(popupEditProfile, {
   submitFormCallBack: (formData) => {
-    submitUser.loading(true);
+    submitUser.renderLoading(true);
     api
       .patchProfile(formData.name, formData.occupation)
       .then((res) => {
@@ -156,7 +145,7 @@ const submitUser = new PopupWithForm(popupEditProfile, {
         submitUser.close();
       })
       .catch((err) => console.log(err))
-      .finally(() => submitUser.loading(false));
+      .finally(() => submitUser.renderLoading(false));
   },
 });
 
@@ -165,7 +154,7 @@ submitUser.setEventListeners();
 //смена аватара
 const submitAvatar = new PopupWithForm(popupEditImageProfile, {
   submitFormCallBack: (formData) => {
-    submitAvatar.loading(true);
+    submitAvatar.renderLoading(true);
     api
       .patchAvatar(formData.url)
       .then((res) => {
@@ -173,7 +162,7 @@ const submitAvatar = new PopupWithForm(popupEditImageProfile, {
         submitAvatar.close();
       })
       .catch((err) => console.log(err))
-      .finally(() => submitAvatar.loading(false));
+      .finally(() => submitAvatar.renderLoading(false));
   },
 });
 submitAvatar.setEventListeners();
