@@ -78,13 +78,13 @@ export default class Card {
   }
 
   updatePutLike(res) {
-    this._element.querySelector(".card__like-count").textContent =
+    this._cardLikeCount.textContent =
     res.likes.length;
     this._likeButton.classList.add("card__like-button_active");
   }
 
   updateDeleteLike(res) {
-    this._element.querySelector(".card__like-count").textContent =
+    this._cardLikeCount.textContent =
     res.likes.length;
     this._likeButton.classList.remove("card__like-button_active");
   }
@@ -98,11 +98,12 @@ export default class Card {
     this._likeButton = this._element.querySelector('.card__like-button');
     this._cardImage = this._element.querySelector('.card__image');
     this._deleteButton = this._element.querySelector('.card__delete-button');
+    this._cardLikeCount = this._element.querySelector('.card__like-count');
 
     this._cardImage.src = this._link;
     this._cardImage.alt = this._name;
     this._element.querySelector('.card__heading').textContent = this._name;
-    this._element.querySelector('.card__like-count').textContent = this._cardLike.length;
+    this._cardLikeCount.textContent = this._cardLike.length;
 
     this._setDeleteButtons();
     this._setLikeButtons();
