@@ -11,6 +11,9 @@ export default class FormValidator {
     this._buttonElement = this._formElement.querySelector(
       this._settings.submitButtonSelector
     );
+    this._inputList = Array.from(
+      this._formElement.querySelectorAll(this._settings.inputSelector)
+    );
   }
 
   _showInputError(inputElement, errorMessage) {
@@ -45,16 +48,11 @@ export default class FormValidator {
   }
 
   _setEventListeners() {
-    const inputList = Array.from(
-      this._formElement.querySelectorAll(this._settings.inputSelector)
-    );
-
-    this._toggleButtonState(inputList);
-
-    inputList.forEach((inputElement) => {
+    this._toggleButtonState();
+    this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(inputElement);
-        this._toggleButtonState(inputList);
+        this._toggleButtonState();
       });
     });
   }
@@ -75,8 +73,16 @@ export default class FormValidator {
     this._buttonElement.removeAttribute("disabled");
   }
 
-  _toggleButtonState(inputList) {
-    if (this._hasInvalidInput(inputList)) {
+  resetValidation() {
+    //this._toggleButtonState(); //прогонка валидации после открытия попапа, статус кнопки меняется в зависимости от данных полей форм
+    this.setInactiveButton(); //кнопка всегда неактивна при открытии попапа
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement); // очистка полей ошибок формы
+    });
+  }
+
+  _toggleButtonState() {
+    if (this._hasInvalidInput(this._inputList)) {
       this.setInactiveButton();
     } else {
       this.setActiveButton();
