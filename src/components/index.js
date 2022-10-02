@@ -44,18 +44,18 @@ popupProfileEditButton.addEventListener("click", () => {
   const { name, about } = setUser.getUserInfo();
   nameInput.value = name;
   jobInput.value = about;
-  userInfo.setInactiveButton();
+  userInfo.resetValidation();
 });
 //открытие попапа добавления карточек
 popupProfileAddButton.addEventListener("click", () => {
   submitButton.open();
-  addCard.setInactiveButton();
+  addCard.resetValidation();
 });
 
 //открытие попапа смены аватара
 popupProfileImageEditButton.addEventListener("click", () => {
   submitAvatar.open();
-  avatarChange.setInactiveButton();
+  avatarChange.resetValidation();
 });
 
 //новая валидация полей
@@ -77,29 +77,29 @@ openImage.setEventListeners();
 
 function handlePutLike(card) {
   api
-  .putLikeCard(card.getId())
-  .then((res) => {
-    card.updatePutLike(res);
-  })
-  .catch((err) => console.log(err));
+    .putLikeCard(card.getId())
+    .then((res) => {
+      card.updatePutLike(res);
+    })
+    .catch((err) => console.log(err));
 }
 
 function handleDeleteLike(card) {
   api
-  .deleteLikeCard(card.getId())
-  .then((res) => {
-    card.updateDeleteLike(res);
-  })
-  .catch((err) => console.log(err));
+    .deleteLikeCard(card.getId())
+    .then((res) => {
+      card.updateDeleteLike(res);
+    })
+    .catch((err) => console.log(err));
 }
 
 function handleDeleteCard(card) {
   api
-  .deleteCard(card.getId())
-  .then(() => {
-    card.deleteCard();
-  })
-  .catch((err) => console.log(err));
+    .deleteCard(card.getId())
+    .then(() => {
+      card.deleteCard();
+    })
+    .catch((err) => console.log(err));
 }
 
 function createCard(item) {
