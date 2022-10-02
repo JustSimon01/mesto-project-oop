@@ -5,9 +5,9 @@ export default class Section {
     this._container = selector;
   }
 
-  setItem(element) {
+  /*setItem(element) {
     this._container.append(element);
-  }
+  }*/
   //добавляет карточку в начало
   addItem(element) {
     this._container.prepend(element);
@@ -19,7 +19,7 @@ export default class Section {
     });
   }
 
-  renderer() {
-    this._renderer(this._renderedItems);
+  render(item) {
+    this._renderer(item);
   }
 }
