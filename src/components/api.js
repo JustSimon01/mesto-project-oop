@@ -18,13 +18,13 @@ export default class Api {
   getInfoUsers() {
     return this._request(`${this._baseUrl}/users/me`, {
       headers: this._headers,
-    })
+    });
   }
 
   getInitialCards() {
     return this._request(`${this._baseUrl}/cards`, {
       headers: this._headers,
-    })
+    });
   }
 
   patchProfile(name, about) {
@@ -35,7 +35,7 @@ export default class Api {
         name: name,
         about: about,
       }),
-    })
+    });
   }
 
   postAddCard(name, link) {
@@ -46,7 +46,7 @@ export default class Api {
         name: name,
         link: link,
       }),
-    })
+    });
   }
 
   patchAvatar(avatar) {
@@ -56,27 +56,27 @@ export default class Api {
       body: JSON.stringify({
         avatar: avatar,
       }),
-    })
+    });
   }
 
   deleteCard(cardId) {
     return this._request(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    })
+    });
   }
 
   putLikeCard(cardId) {
     return this._request(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: "PUT",
       headers: this._headers,
-    })
+    });
   }
 
   deleteLikeCard(cardId) {
     return this._request(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    })
+    });
   }
 }
